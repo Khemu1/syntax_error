@@ -2,26 +2,53 @@
 @tailwind components;
 @tailwind utilities;
 
-:root {
-  --background: #ffffff;
-  --foreground: #171717;
+@font-face {
+  font-family: "Xeroda"; /* Give your font a name */
+  src: url("/app/fonts/XerodaRegular-p7dwr.otf") format("otf"),
+    url("/app/fonts/XerodaRegular-p7dwr.otf") format("otf");
+}
+* {
+  box-sizing: border-box;
+  padding: 0;
+  margin: 0;
+  font-family: Arial, Helvetica, sans-serif !important;
+  /* font-family: "Xeroda" !important; */
+}
+nav {
+  @apply mx-auto p-2 flex w-[100dvw] justify-between items-center sticky top-0 z-[15] bg-base-100;
+  /* box-shadow: 0px 0px 0px 0px #272626; */
+  border-style: 10px 10px 10px 10px;
+  transition: 400ms ease-in-out;
+}
+.nav_scrolled {
+  @apply md:w-[75dvw];
+  backdrop-filter: blur(10px);
+  background-color: transparent;
+  transition: 400ms ease-in-out;
+}
+.nav_buttons {
+  @apply flex justify-center bg-gray-800  rounded-lg cursor-pointer py-2 hover:bg-gray-700 transition-all;
+  flex: 1 1 0;
+  min-width: 0;
+  flex-basis: 50px;
+}
+.CTA {
+  @apply px-3 py-2 sm:px-4 sm:py-3 mx-auto bg-blue-500 hover:bg-blue-700 text-white rounded-full font-semibold fade-in;
+  transition: 250ms ease-in-out;
 }
 
-@media (prefers-color-scheme: dark) {
-  :root {
-    --background: #0a0a0a;
-    --foreground: #ededed;
+@keyframes fadeIn {
+  0% {
+    opacity: 0;
+    transform: translateY(20px);
+  }
+  100% {
+    opacity: 1;
+    transform: translateY(0);
   }
 }
 
-body {
-  color: var(--foreground);
-  background: var(--background);
-  font-family: Arial, Helvetica, sans-serif;
-}
-
-@layer utilities {
-  .text-balance {
-    text-wrap: balance;
-  }
+.fade-in {
+  animation: fadeIn 1s ease-in-out forwards;
+  opacity: 0;
 }
