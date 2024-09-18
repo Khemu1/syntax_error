@@ -34,13 +34,11 @@ nav {
   transition: 400ms ease-in-out;
 }
 
-.nav_buttons {
+.nav_buttons > *  {
   @apply flex justify-center items-center shadow-2xl bg-base-100 rounded-lg cursor-pointer hover:bg-blue-600 text-white px-3 py-2  transition-all;
   min-width: max-content;
 }
-.nav_buttons:active {
-  transform: scale(1.01);
-}
+
 .nav_menu {
   @apply flex flex-col font-semibold  absolute bg-base-300 right-0 top-full w-[170px] pt-2 pb-3;
   transition: 400ms ease-in-out;
