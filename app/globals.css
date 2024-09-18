@@ -23,22 +23,43 @@ body {
 }
 
 nav {
-  @apply mx-auto p-2 flex w-[100dvw] justify-between items-center sticky top-0 z-[15] bg-base-100;
-  /* box-shadow: 0px 0px 0px 0px #272626; */
-  border-style: 10px 10px 10px 10px;
+  @apply mx-auto p-2 flex w-[100vw] justify-between items-center sticky top-0 z-[15] bg-base-100;
   transition: 400ms ease-in-out;
 }
+
 .nav_scrolled {
-  @apply md:w-[75dvw];
+  @apply lg:w-[75vw];
   backdrop-filter: blur(10px);
   background-color: transparent;
   transition: 400ms ease-in-out;
 }
+
 .nav_buttons {
-  @apply flex justify-center bg-gray-800  rounded-lg cursor-pointer py-2 hover:bg-gray-700 transition-all;
-  flex: 1 1 0;
-  min-width: 0;
-  flex-basis: 50px;
+  @apply flex justify-center items-center shadow-2xl bg-base-100 rounded-lg cursor-pointer  hover:bg-blue-600 text-white px-3 py-2  transition-all;
+  min-width: max-content;
+}
+.nav_buttons:active {
+  transform: scale(1.01);
+}
+.nav_menu {
+  @apply flex flex-col gap-5 font-semibold absolute bg-base-300 right-0 top-full w-[170px] pt-2 pb-3;
+  transition: 400ms ease-in-out;
+  transform: translateX(10px) translateY(9px);
+  z-index: 20;
+}
+
+.nav_menu_closed {
+  @apply hidden;
+}
+
+.nav_menu_scrolled {
+  backdrop-filter: blur(10px);
+  background-color: transparent;
+  transition: 400ms ease-in-out;
+}
+
+.nav_menu > * {
+  @apply transition-all hover:bg-base-100;
 }
 .CTA {
   @apply px-3 py-2 sm:px-4 sm:py-3 mx-auto bg-blue-500 hover:bg-blue-700 text-white rounded-full font-semibold fade-in;
@@ -91,7 +112,7 @@ footer {
   @apply flex gap-10 p-2 flex-wrap;
 }
 .link_group {
-  @apply flex flex-col gap-2 mx-6;
+  @apply flex flex-col gap-2 sm:mx-6;
 }
 .privay_terms {
   @apply flex flex-wrap gap-5 sm:gap-4 justify-between p-4;
@@ -132,6 +153,7 @@ courses_box {
 .courses_page {
   display: grid;
   grid-template-columns: repeat(1, 1fr); /* Default for small screens */
+  justify-items: center;
   gap: 25px;
 }
 

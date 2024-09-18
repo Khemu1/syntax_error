@@ -50,8 +50,10 @@ export const Hero = () => {
             />
           </div>
           <div className="flex flex-col items-center">
-            <h1 className="text-4xl font-bold text-center">Who Are We</h1>
-            <p className="text-lg mt-2 text-center">
+            <h1 className="text-4xl font-bold text-center text-white">
+              Who Are We
+            </h1>
+            <p className="text-lg mt-2 text-center px-2">
               Syntax Error is a team that specializes in giving courses.
             </p>
           </div>
