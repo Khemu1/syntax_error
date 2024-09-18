@@ -32,9 +32,10 @@ const Nav = () => {
           width={45}
           height={10}
         />
-        <span className="font-extrabold text-2xl">Syntax Error</span>
+        <span className="font-extrabold text-sm md:text-2xl">Syntax Error</span>
       </Link>
-      <ul className="flex gap-5 font-semibold  w-[200px]">
+      <div className="hidden">
+      <ul className="flex gap-5 font-semibold w-[200px]">
         <li className="nav_buttons">
           <Link href={"/"}>Home</Link>
         </li>
@@ -46,6 +47,10 @@ const Nav = () => {
         <button type="button" className="nav_buttons">
           Sign In
         </button>
+        </div>
+      </div>
+      <div>
+        
       </div>
     </nav>
   );

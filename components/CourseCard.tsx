@@ -3,7 +3,7 @@ import React from "react";
 
 const CourseCard = () => {
   return (
-    <div className="flex justify-center">
+    <div className="flex justify-center w-max">
       <div className="rounded-xl overflow-hidden shadow-lg transition-transform duration-300 hover:scale-105 cursor-pointer hover:shadow-2xl bg-base-100 max-w-[250px]">
         <Image
           alt="card"

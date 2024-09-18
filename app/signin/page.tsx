@@ -1,9 +1,9 @@
 "use client";
-import { SignInProps } from "@/types";
 import Image from "next/image";
-import { useState } from "react";
+import React, { useState } from "react";
 import formStyle from "@/styles/formStyle.module.css";
 import Link from "next/link";
+import { SignInProps } from "@/types";
 export const runtime = "edge";
 const SignIn = () => {
   const [data, setData] = useState<SignInProps>({
@@ -37,6 +37,8 @@ const SignIn = () => {
               name="usernameOrEmail"
               placeholder="Enter your email or username"
               className={formStyle.input}
+              value={data.usernameOrEmail}
+              onChange={(e:React.ChangeEvent<HTMLInputElement>)=>setData((prev:SignInProps)=>({...prev,usernameOrEmail:e.target.value}))}
             />
           </div>
 
@@ -50,6 +52,8 @@ const SignIn = () => {
               name="password"
               placeholder="Enter your password"
               className={formStyle.input}
+                            value={data.password}
+              onChange={(e:React.ChangeEvent<HTMLInputElement>)=>setData((prev:SignInProps)=>({...prev,password:e.target.value}))}
             />
             <Link
               href="/forgot-password"

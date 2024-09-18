@@ -36,3 +36,10 @@ export const footerLinks = [
     ],
   },
 ];
+
+export const filters = [
+  { name: "Name ASC", value: "name-asc" },
+  { name: "Name DSC", value: "name-desc" },
+  { name: "Price ASC", value: "price-asc" },
+  { name: "Price DSC", value: "price-desc" },
+];
