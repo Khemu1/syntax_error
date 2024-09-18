@@ -40,7 +40,7 @@ export const Hero = () => {
       </div>
 
       <div className="flex justify-center items-center py-10 bg-base-200">
-        <div className="flex gap-10 flex-col sm:flex-row items-center">
+        <div className="flex gap-10 flex-col sm:flex-row items-center my-8">
           <div className="hero_logo rounded-full">
             <Image
               src="/assets/imgs/logo.png"
