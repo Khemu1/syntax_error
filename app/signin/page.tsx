@@ -4,7 +4,7 @@ import Image from "next/image";
 import { useState } from "react";
 import formStyle from "@/styles/formStyle.module.css";
 import Link from "next/link";
-
+export const runtime = "edge";
 const SignIn = () => {
   const [data, setData] = useState<SignInProps>({
     usernameOrEmail: "",
