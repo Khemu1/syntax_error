@@ -40,8 +40,8 @@ export const Hero = () => {
       </div>
 
       <div className="flex justify-center items-center py-10 bg-base-200">
-        <div className="flex gap-4 items-center">
-          <div>
+        <div className="flex gap-10 flex-col sm:flex-row items-center">
+          <div className="hero_logo rounded-full">
             <Image
               src="/assets/imgs/logo.png"
               alt="Logo"
@@ -49,9 +49,9 @@ export const Hero = () => {
               height={50}
             />
           </div>
-          <div>
-            <h1 className="text-4xl font-bold">Who Are We</h1>
-            <p className="text-lg mt-2">
+          <div className="flex flex-col items-center">
+            <h1 className="text-4xl font-bold text-center">Who Are We</h1>
+            <p className="text-lg mt-2 text-center">
               Syntax Error is a team that specializes in giving courses.
             </p>
           </div>

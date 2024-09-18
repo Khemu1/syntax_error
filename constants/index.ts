@@ -21,8 +21,14 @@ export const footerLinks = [
     name: "Socials",
     links: [
       { title: "Discord", url: "https://discord.gg/mMG2xqb24q" },
-      { title: "Instagram", url: "/" },
-      { title: "Twitter", url: "/" },
+      {
+        title: "Instagram",
+        url: "https://www.instagram.com/syntax_error176?igsh=Ynp6YjhqOGdyaTU2",
+      },
+      {
+        title: "Youtube",
+        url: "https://youtube.com/@syntaxerrorteam-pp5rm?si=WWVKG_cMDf_3Gy_x",
+      },
       {
         title: "Facebook",
         url: "https://www.facebook.com/profile.php?id=61550968236226",

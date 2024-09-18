@@ -21,7 +21,7 @@ const Nav = () => {
     };
   }, []);
   return (
-    <nav ref={navRef}>
+    <nav ref={navRef} className="bg-base-300">
       <Link
         className="flex items-center hover:bg-gray-800 p-1 rounded-lg transition-all"
         href={"/"}

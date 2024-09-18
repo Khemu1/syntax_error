@@ -14,6 +14,14 @@
   font-family: Arial, Helvetica, sans-serif !important;
   /* font-family: "Xeroda" !important; */
 }
+body {
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between;
+  min-height: 100vh;
+  @apply bg-base-200;
+}
+
 nav {
   @apply mx-auto p-2 flex w-[100dvw] justify-between items-center sticky top-0 z-[15] bg-base-100;
   /* box-shadow: 0px 0px 0px 0px #272626; */
@@ -51,4 +59,106 @@ nav {
 .fade-in {
   animation: fadeIn 1s ease-in-out forwards;
   opacity: 0;
+}
+
+.hero_logo {
+  box-shadow: 0px 0px 15px 15px rgba(24, 24, 148, 0.418);
+  animation: pulse 2s infinite ease-in-out;
+}
+
+@keyframes pulse {
+  0% {
+    box-shadow: 0px 0px 15px 15px rgba(24, 24, 148, 0.418);
+  }
+  50% {
+    box-shadow: 0px 0px 25px 25px rgba(24, 24, 148, 0.7);
+  }
+  100% {
+    box-shadow: 0px 0px 15px 15px rgba(24, 24, 148, 0.418);
+  }
+}
+
+footer {
+  @apply flex flex-col gap-3 w-full p-3 bg-base-300;
+}
+.main_info {
+  @apply flex w-full justify-between flex-wrap p-3;
+}
+.left {
+  @apply flex flex-col gap-3 mb-3;
+}
+.links {
+  @apply flex gap-10 p-2 flex-wrap;
+}
+.link_group {
+  @apply flex flex-col gap-2 mx-6;
+}
+.privay_terms {
+  @apply flex flex-wrap gap-5 sm:gap-4 justify-between p-4;
+}
+
+courses_box {
+  @apply mb-10 mt-16 px-5;
+  display: grid;
+  grid-template-rows: auto; /* Header at the top, then rows */
+  gap: 15px;
+}
+
+.courses_titles {
+  @apply font-semibold text-white;
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  justify-items: center;
+  gap: 10px;
+}
+
+.courses_titles > * {
+  @apply flex w-full items-center py-3 justify-center shadow-md bg-gray-800 rounded-xl;
+}
+
+.course_box {
+  @apply grid grid-cols-3 gap-5 items-center bg-gray-800 py-4 rounded-xl shadow-md text-center transition-all;
+  justify-items: center;
+}
+
+.course_box:hover {
+  @apply bg-gray-700; /* Add subtle hover effect */
+}
+
+.course_box > * {
+  @apply py-2 font-medium text-white; /* Make sure the text is centered and looks good */
+}
+
+.courses_page {
+  display: grid;
+  grid-template-columns: repeat(1, 1fr); /* Default for small screens */
+  gap: 25px;
+}
+
+/* Medium screens (tablets) */
+@media (min-width: 640px) {
+  .courses_page {
+    grid-template-columns: repeat(2, 1fr);
+  }
+}
+
+/* Large screens (small laptops) */
+@media (min-width: 768px) {
+  .courses_page {
+    grid-template-columns: repeat(3, 1fr);
+  }
+}
+
+/* Extra large screens (large laptops/desktops) */
+@media (min-width: 1024px) {
+  .courses_page {
+    grid-template-columns: repeat(4, 1fr);
+  }
+}
+
+/* 2XL screens (larger desktops) */
+@media (min-width: 1400px) {
+  .courses_page {
+    grid-template-columns: repeat(5, 1fr); /* Original design */
+  }
 }
