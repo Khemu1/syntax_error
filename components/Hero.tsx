@@ -41,13 +41,8 @@ export const Hero = () => {
 
       <div className="flex justify-center items-center py-10 bg-base-200">
         <div className="flex gap-10 flex-col sm:flex-row items-center my-8">
-          <div className="hero_logo rounded-full">
-            <Image
-              src="/assets/imgs/logo.png"
-              alt="Logo"
-              width={150}
-              height={50}
-            />
+          <div className="relative  rounded-full overflow-hidden h-[100px] w-[100px] md:w-[150px] md:h-[150px] hero_logo">
+            <Image src={"/assets/imgs/logo.png"} alt={"logo"} fill={true} />
           </div>
           <div className="flex flex-col items-center">
             <h1 className="text-4xl font-bold text-center text-white">

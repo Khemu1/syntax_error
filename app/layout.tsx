@@ -16,9 +16,9 @@ export default function RootLayout({
   return (
     <html data-theme="luxury" lang="en">
       <body>
-        <main className="w-full flex flex-col flex-grow justify-between">
+        <main className="w-full h-full flex flex-col flex-grow justify-between">
           <Nav />
-          {children}
+          <div className="flex-grow h-full">{children}</div>
           <Footer />
         </main>
       </body>

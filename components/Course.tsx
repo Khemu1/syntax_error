@@ -1,6 +1,6 @@
 import React from "react";
 
-const SubscribedCourse = () => {
+const Course = () => {
   return (
     <div className="course_box">
       <p>46654D</p>
@@ -10,4 +10,4 @@ const SubscribedCourse = () => {
   );
 };
 
-export default SubscribedCourse;
+export default Course;
