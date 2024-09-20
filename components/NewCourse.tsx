@@ -1,74 +1,71 @@
-"use client";
 import { useRef, useState } from "react";
-import { Editor } from "@tinymce/tinymce-react";
-type TinyMCEEditor = {
-  getContent: () => string;
-};
-export default function App() {
+import EditorComponent from "./EditorComponent";
+import { Editor as TinyMCEEditor } from "tinymce";
+import FileUploader from "./FileUploader";
+import { FilePondFile } from "filepond";
+
+const NewCourse = () => {
   const editorRef = useRef<TinyMCEEditor | null>(null);
-  const [mentour, setMentour] = useState(false);
+  const [title, setTitle] = useState("");
+
+  const [courseImage, setCourseImage] = useState<FilePondFile[]>([]);
+  const [mindmapImage, setMindmapImage] = useState<FilePondFile[]>([]);
+
   const handleSubmit = (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault();
-    if (editorRef && editorRef.current) {
+
+    if (editorRef.current) {
       const formData = new FormData(e.currentTarget);
       const content = editorRef.current.getContent();
       formData.append("content", content);
+      formData.append("title", title);
+
+      // Append images to the form data
+      if (courseImage.length > 0) {
+        formData.append("courseImage", courseImage[0].file);
+      }
+      if (mindmapImage.length > 0) {
+        formData.append("mindmapImage", mindmapImage[0].file);
+      }
+
       console.log(formData);
+      // Here you would typically send formData to your server
     }
   };
-  const handleMentour=(e:React.ChangeEvent<HTMLInputElement>) => {
-    e.currentTarget===
-  }
+
   return (
     <form onSubmit={handleSubmit}>
+      {/* Title Input */}
       <div>
         <label htmlFor="title">Course Title</label>
-        <input id="title" name="title" type="text" required />
-      </div>
-      <div>
-        <label htmlFor="">about instructor</label>
-        <Editor
-          apiKey={process.env.NEXT_PUBLIC_EDITOR_KEY}
-          onInit={(_evt, editor) => (editorRef.current = editor)}
-          initialValue="<p>This is the initial content of the editor.</p>"
-          init={{
-            height: 500,
-            menubar: false,
-            plugins: [
-              "advlist",
-              "autolink",
-              "lists",
-              "link",
-              "image",
-              "charmap",
-              "preview",
-              "anchor",
-              "searchreplace",
-              "visualblocks",
-              "code",
-              "fullscreen",
-              "insertdatetime",
-              "media",
-              "table",
-              "code",
-              "help",
-              "wordcount",
-            ],
-            toolbar:
-              "undo redo | blocks | " +
-              "bold italic forecolor | alignleft aligncenter " +
-              "alignright alignjustify | bullist numlist outdent indent | " +
-              "removeformat | help",
-            content_style:
-              "body { font-family:Helvetica,Arial,sans-serif; font-size:14px }",
-          }}
+        <input
+          type="text"
+          placeholder="Title"
+          value={title}
+          onChange={(e: React.ChangeEvent<HTMLInputElement>) =>
+            setTitle(e.target.value)
+          }
         />
       </div>
-      <div>
-        <label htmlFor="mintour">There{"'"}s a mentour </label>
-        <input id="mintour" type="checkbox" value={"mentor"} onChange={(e:React.ChangeEvent<HTMLInputElement>)=>} />
-      </div>
+      {/* Course Image Uploader */}
+      <FileUploader
+        files={courseImage}
+        setFiles={setCourseImage}
+        title="Course"
+      />
+      {/* Editor Component */}
+      <EditorComponent editorRef={editorRef} />
+
+      {/* Mindmap Image Uploader */}
+      <FileUploader
+        files={mindmapImage}
+        setFiles={setMindmapImage}
+        title="Mindmap"
+      />
+
       <button type="submit">Submit</button>
     </form>
   );
-}
+};
+
+export default NewCourse;
