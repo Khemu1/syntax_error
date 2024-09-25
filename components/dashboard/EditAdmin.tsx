@@ -5,7 +5,7 @@ import Image from "next/image";
 
 const EditAdmin = () => {
   const dialogState = useSelector((state: RootState) => state.dialog);
-
+  const data = "";
   return (
     <div className="flex flex-col gap-4">
       <div className="flex flex-col items-center text-center mb-5">
