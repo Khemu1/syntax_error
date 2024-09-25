@@ -9,7 +9,7 @@ pipeline {
         stage("init groovy") {
             steps {
               script {
-                gv = load "script.groovy"
+                gv = load "cicd/script.groovy"
               }
             }
         }
