@@ -13,6 +13,13 @@
   width: 100%;
   transition: 250ms ease-in-out;
 }
+.form .input_error {
+  border-bottom-color: rgb(203, 16, 16);
+}
+.form label {
+  color: white;
+  font-weight: 700;
+}
 .form button {
   margin-top: 5px;
   padding: 9;
@@ -20,8 +27,13 @@
   background-color: rgb(3, 121, 231);
   flex-basis: 45px;
   transition: 250ms ease-in-out;
+  font-weight: 700;
 }
-.form button:hover {
+.form .button_success {
+  background-color: #0c1425;
+  color: white;
+}
+.form button:hover:not(.button_success) {
   background-color: rgb(6, 111, 209);
   color: white;
 }

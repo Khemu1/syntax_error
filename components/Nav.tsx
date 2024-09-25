@@ -1,4 +1,7 @@
 "use client";
+import { useAuthUser } from "@/hooks/auth";
+import { RootState } from "@/store/store";
+import { useSelector } from "react-redux";
 import Image from "next/image";
 import Link from "next/link";
 import { useEffect, useRef, useState } from "react";
@@ -7,6 +10,10 @@ const Nav = () => {
   const [isMenuOpen, setIsMenuOpen] = useState(false);
   const navRef = useRef<HTMLElement>(null);
   const menuRef = useRef<HTMLUListElement>(null);
+  // const dispatch = useDispatch();
+  const authState = useSelector((state: RootState) => state.auth);
+
+  useAuthUser();
 
   useEffect(() => {
     const handleScroll = () => {
@@ -77,24 +84,32 @@ const Nav = () => {
         </span>
       </Link>
       <div className="hidden sm:flex gap-5 w-auto">
-        <ul className="flex gap-5 font-semibold">
+        <ul className="flex items-center m-0 gap-5 font-semibold list-none h-max">
           <li className="nav_buttons">
             <Link href={"/"}>Home</Link>
           </li>
           <li className="nav_buttons">
             <Link href={"/courses"}>Courses</Link>
           </li>
-          <li className="nav_buttons">
-            <Link href={"/admin"}>Admin Dashboard</Link>
-          </li>
-          <li className="nav_buttons">
-            <Link href={"/signin"}>Sign In</Link>
-          </li>
+          {authState.isAuthenticated && (authState.role === 1 || 2) && (
+            <li onClick={() => setIsMenuOpen(false)} className="nav_buttons">
+              <Link href={"/admin"}>Admin Dashboard</Link>
+            </li>
+          )}
+          {!authState.isAuthenticated ? (
+            <li className="nav_buttons">
+              <Link href={"/signin"}>Sign In</Link>
+            </li>
+          ) : (
+            <li className="nav_buttons">
+              <button type="button">Sign Out</button>
+            </li>
+          )}
         </ul>
         <div className="flex font-semibold"></div>
       </div>
       <div className="sm:hidden flex justify-end w-full relative">
-        <button
+        <div
           className="w-[50px] h-[50px] relative"
           onClick={() => setIsMenuOpen((prev) => !prev)}
         >
@@ -109,14 +124,23 @@ const Nav = () => {
             <li onClick={() => setIsMenuOpen(false)}>
               <Link href={"/courses"}>Courses</Link>
             </li>
-            <li onClick={() => setIsMenuOpen(false)}>
-              <Link href={"/admin"}>Admin Dashboard</Link>
-            </li>
-            <li onClick={() => setIsMenuOpen(false)}>
-              <Link href={"/signin"}>Sign In</Link>
-            </li>
+            {authState.isAuthenticated && (authState.role === 1 || 2) && (
+              <li onClick={() => setIsMenuOpen(false)}>
+                <Link href={"/admin"}>Admin Dashboard</Link>
+              </li>
+            )}
+
+            {!authState.isAuthenticated ? (
+              <li>
+                <Link href={"/signin"}>Sign In</Link>
+              </li>
+            ) : (
+              <li>
+                <button type="button">Sign Out</button>
+              </li>
+            )}
           </ul>
-        </button>
+        </div>
       </div>
     </nav>
   );

@@ -1,45 +1,174 @@
 "use client";
-import NewCourse from "@/components/NewCourse";
+import { useEffect, useState } from "react";
 import Image from "next/image";
-import React, { useState } from "react";
-export const runtime = "edge";
+import { useRouter } from "next/navigation";
+import { useDispatch, useSelector } from "react-redux";
+import NewCourse from "@/components/dashboard/NewCourse";
+import Courses from "@/components/dashboard/Courses";
+import { RootState } from "@/store/store";
+import Admins from "@/components/dashboard/Admins";
+import { logout } from "@/store/slices/authSlice";
+import Owners from "@/components/dashboard/Owners";
 
 const Admin = () => {
   const [isSideBarOpen, setIsSideBarOpen] = useState(false);
+  const routeTo = useRouter();
+  const dispatch = useDispatch();
+  const authState = useSelector((state: RootState) => state.auth);
+  const [section, setSection] = useState("newCourse"); // Default section
+  const localStorageAuth = localStorage.getItem("userData");
+
+  useEffect(() => {
+    if (localStorageAuth) {
+      const { role } = JSON.parse(localStorageAuth);
+
+      if (!authState.isAuthenticated) {
+        dispatch(logout());
+      }
+
+      if (role !== 1 && role !== 2) {
+        routeTo.push("/");
+      } else {
+        if (role === 1) {
+          setSection("courses");
+        }
+      }
+    } else {
+      routeTo.push("/signin");
+    }
+  }, [authState, dispatch, routeTo, localStorageAuth]);
+
+  if (!authState.isAuthenticated) {
+    return (
+      <div className="flex w-full h-full my-auto justify-center items-center">
+        <span className="loading loading-infinity w-[150px]" />
+      </div>
+    );
+  }
 
   return (
-    <div className="admin_dashboard flex h-full relative">
-      {/* <button
-        className="absolute flex   left-4 top-3 w-[32px] h-[32px]"
-        onClick={() => setIsSideBarOpen(true)}
-      >
-        <Image
-          alt="sidebar"
-          src={"/assets/icons/sidebar.svg"}
-          width={32}
-          height={32}
-        />
-      </button>
-      <button className="absolute right-4 top-3 text-white bg-gray-950 font-semibold px-4 py-2 rounded-lg">
-        Delete
-      </button> */}
-      {/* mobile sidebar */}
+    <div className="admin_dashboard">
+      <div className="mt-5 lg:hidden">
+        <button
+          className="flex left-4 top-3 w-[32px] h-[32px]"
+          onClick={() => setIsSideBarOpen(true)}
+        >
+          <Image
+            alt="sidebar"
+            src={"/assets/icons/sidebar.svg"}
+            width={32}
+            height={32}
+          />
+        </button>
+      </div>
+      <aside className={`bg-base-100 `}>
+        {authState.isAuthenticated && authState.role === 1 && (
+          <>
+            <button
+              className={`${
+                section === "courses"
+                  ? "bg-gray-800"
+                  : "transition-all hover:bg-gray-700"
+              }`}
+              onClick={() => setSection("courses")}
+            >
+              Courses
+            </button>
+            <button
+              className={`${
+                section === "admins"
+                  ? "bg-gray-800"
+                  : "transition-all hover:bg-gray-700"
+              }`}
+              onClick={() => setSection("admins")}
+            >
+              Admins
+            </button>
+            <button
+              className={`${
+                section === "owners"
+                  ? "bg-gray-800"
+                  : "transition-all hover:bg-gray-700"
+              }`}
+              onClick={() => setSection("owners")}
+            >
+              Owners
+            </button>
+          </>
+        )}
+        <button
+          className={`${
+            section === "newCourse"
+              ? "bg-gray-800"
+              : "transition-all hover:bg-gray-700"
+          }`}
+          onClick={() => setSection("newCourse")}
+        >
+          New Course
+        </button>
+      </aside>
+
       <aside
         className={`bg-base-100 aside_mobile ${
           !isSideBarOpen ? "aside_mobile_closed" : ""
         }`}
       >
         <button
-          className=" text-white flex justify-center bg-blue-600 mb-5 h-max "
+          className="text-white flex justify-center bg-blue-600 mb-5 h-max"
           onClick={() => setIsSideBarOpen(false)}
         >
           Close SideBar
         </button>
-        <button className="bg-gray-800">Courses</button>
-        <button>New Course</button>
+        {authState.isAuthenticated && authState.role === 1 && (
+          <>
+            <button
+              className={`${
+                section === "courses"
+                  ? "bg-gray-800"
+                  : "transition-all hover:bg-gray-700"
+              }`}
+              onClick={() => setSection("courses")}
+            >
+              Courses
+            </button>
+            <button
+              className={`${
+                section === "admins"
+                  ? "bg-gray-800"
+                  : "transition-all hover:bg-gray-700"
+              }`}
+              onClick={() => setSection("admins")}
+            >
+              Admins
+            </button>
+            <button
+              className={`${
+                section === "owners"
+                  ? "bg-gray-800"
+                  : "transition-all hover:bg-gray-700"
+              }`}
+              onClick={() => setSection("owners")}
+            >
+              Owners
+            </button>
+          </>
+        )}
+        <button
+          className={`${
+            section === "newCourse"
+              ? "bg-gray-800"
+              : "transition-all hover:bg-gray-700"
+          }`}
+          onClick={() => setSection("newCourse")}
+        >
+          New Course
+        </button>
       </aside>
-      <section className="bg-base-200 flex-grow  mb-10">
-        <NewCourse />
+      <section className="bg-base-200 flex-grow mt-5">
+        {section === "newCourse" && <NewCourse />}
+        {section === "courses" && <Courses />}
+        {section === "admins" && <Admins />}
+        {section === "owners" && <Owners />}
       </section>
     </div>
   );

@@ -1,7 +1,6 @@
 import type { Metadata } from "next";
 import "./globals.css";
-import Nav from "@/components/Nav";
-import Footer from "@/components/Footer";
+import Holder from "@/components/Holder";
 
 export const metadata: Metadata = {
   title: "Syntax Error",
@@ -16,10 +15,8 @@ export default function RootLayout({
   return (
     <html data-theme="luxury" lang="en">
       <body>
-        <main className="w-full h-full flex flex-col flex-grow justify-between">
-          <Nav />
-          <div className="flex-grow h-full">{children}</div>
-          <Footer />
+        <main className="w-full min-h-[100dvh] flex flex-col ">
+          <Holder>{children}</Holder>
         </main>
       </body>
     </html>

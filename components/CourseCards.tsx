@@ -1,18 +1,25 @@
-import React from "react";
 import CourseCard from "./CourseCard";
+import { PublicCardCourseProps } from "@/types";
+import SkeletonCard from "./skeletons/SkeletonCard";
 
-const CourseCards = () => {
+type Props = {
+  loading: boolean;
+  courses: [] | PublicCardCourseProps[];
+};
+const CourseCards: React.FC<Props> = ({ loading, courses }) => {
+  console.log(courses);
   return (
     <div className="courses_page">
-      <CourseCard />
-      <CourseCard />
-      <CourseCard />
-      <CourseCard />
-      <CourseCard />
-      <CourseCard />
-      <CourseCard />
-      <CourseCard />
-      <CourseCard />
+      {loading
+        ? Array.from({ length: 8 }).map((_, index) => (
+            <SkeletonCard key={index} />
+          ))
+        : courses.map((course) => (
+            <CourseCard
+              key={course.id}
+            course={course}
+            />
+          ))}
     </div>
   );
 };

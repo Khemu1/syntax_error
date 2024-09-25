@@ -1,0 +1,153 @@
+import { CustomError } from "@/app/api/error";
+import { object, string, ZodError, number } from "zod";
+
+export const validateWithSchema = (error: CustomError | ZodError | unknown) => {
+  console.log("got error schema", error instanceof CustomError);
+
+  if (error instanceof ZodError) {
+    const errors = error.errors.reduce((acc: Record<string, string>, curr) => {
+      const fieldName = curr.path.join(".");
+      acc[fieldName] = curr.message;
+      return acc;
+    }, {});
+    return errors; // Return the errors in the desired format
+  } else if (error instanceof CustomError) {
+    return {
+      message: error.message,
+      details: error.details, // Optionally include details
+    };
+  }
+
+  return {
+    message: "An unknown error occurred",
+  };
+};
+
+const errorMessages = {
+  email: {
+    invalid: "Please enter a valid email address.",
+    required: "Email is required.",
+  },
+  password: {
+    min: "Password must be at least 8 characters long.",
+    max: "Password cannot exceed 20 characters.",
+    required: "Password is required.",
+  },
+  courseTitle: {
+    required: "Course title is required.",
+    min: "Course title must be at least 3 characters long.",
+  },
+  instructorAndMentorInfo: {
+    required: "Instructor/Mentor info is required.",
+    min: "Instructor/Mentor info must be at least 10 characters long.",
+  },
+  courseInfo: {
+    required: "Course info is required.",
+    min: "Course info must be at least 10 characters long.",
+  },
+  username: {
+    min: "Username must be at least 3 characters long.",
+    required: "Username is required.",
+  },
+  courseImage: {
+    required: "Course image is required.",
+    invalidType: "Only image files are allowed for the course image.",
+  },
+  mindmapImage: {
+    required: "Mindmap image is required.",
+    invalidType: "Only image files are allowed for the mindmap image.",
+  },
+  file: {
+    nameRequired: "File name is required.",
+    nameMin: "File name cannot be empty.",
+    sizeMin: "File size must be greater than 0.",
+    invalidType: "Only image files are allowed.",
+  },
+  usernameOrEmail: {
+    required: "Username or email must be provided.",
+  },
+  totalSessions: {
+    required: "Total sessions are required.",
+    min: "Total sessions must be at least 3.",
+  },
+  totalTasks: {
+    required: "Total tasks are required.",
+    min: "Total tasks must be at least 1.",
+  },
+  totalSessionPerWeek: {
+    required: "Total sessions per week are required.",
+    min: "Total sessions per week must be at least 1.",
+  },
+  price: {
+    required: "Price is required.",
+    min: "Price must be at least 10.",
+  },
+};
+
+export const fileSchema = object({
+  name: string({
+    required_error: errorMessages.file.nameRequired,
+  }).min(1, { message: errorMessages.file.nameMin }),
+  size: number().positive({ message: errorMessages.file.sizeMin }),
+  type: string().refine((val) => val.startsWith("image/"), {
+    message: errorMessages.file.invalidType,
+  }),
+});
+
+export const newCourseSchema = object({
+  title: string({
+    required_error: errorMessages.courseTitle.required,
+  }).min(3, { message: errorMessages.courseTitle.min }),
+
+  courseImage: fileSchema,
+
+  mindmapImage: fileSchema,
+
+  instructorAndMentorInfo: string({
+    required_error: errorMessages.instructorAndMentorInfo.required,
+  }).min(10, { message: errorMessages.instructorAndMentorInfo.min }),
+
+  courseInfo: string({
+    required_error: errorMessages.courseInfo.required,
+  }).min(10, { message: errorMessages.courseInfo.min }),
+
+  totalSessions: number({
+    required_error: errorMessages.totalSessions.required,
+  }).min(3, { message: errorMessages.totalSessions.min }),
+
+  totalSessionPerWeek: number({
+    required_error: errorMessages.totalSessionPerWeek.required,
+  }).min(1, { message: errorMessages.totalSessionPerWeek.min }),
+
+  totalTasks: number({ required_error: errorMessages.totalTasks.required }).min(
+    1,
+    { message: errorMessages.totalTasks.min }
+  ),
+  price: number({ required_error: errorMessages.price.required }).min(5, {
+    message: errorMessages.price.min,
+  }),
+});
+
+export const signInSchema = object({
+  usernameOrEmail: string({
+    required_error: errorMessages.usernameOrEmail.required,
+  }).min(1, { message: errorMessages.usernameOrEmail.required }),
+
+  password: string({
+    required_error: errorMessages.password.required,
+  }).min(1, { message: errorMessages.password.required }),
+});
+
+export const signUpSchema = object({
+  username: string({
+    required_error: errorMessages.username.required,
+  }).min(3, { message: errorMessages.username.min }),
+
+  email: string({
+    required_error: errorMessages.email.required,
+  }).email({ message: errorMessages.email.invalid }),
+
+  password: string({
+    required_error: errorMessages.password.required,
+  }).min(8, { message: errorMessages.password.min }),
+});
