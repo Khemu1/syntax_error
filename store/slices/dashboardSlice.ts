@@ -7,7 +7,12 @@ import {
 } from "@/types";
 
 // Define initial states
-const myDataInitState: MyDataDashboard | {} = {};
+const myDataInitState: MyDataDashboard = {
+  id: -1,
+  username: "",
+  email: "",
+  createdAt: new Date(),
+};
 const ownersInitState: OwnerDashboard[] = [];
 const adminsInitState: AdminDashboard[] = [];
 const coursesInitState: CourseDashboard[] = [];
@@ -21,16 +26,16 @@ const dashboardSlice = createSlice({
     courses: coursesInitState,
   },
   reducers: {
-    setMyData: (state, action: PayloadAction<MyDataDashboard | {}>) => {
+    setMyData: (state, action: PayloadAction<MyDataDashboard>) => {
       state.myData = action.payload;
     },
-    setOwners: (state, action: PayloadAction<OwnerDashboard[]>) => {
+    setOwners: (state, action: PayloadAction<OwnerDashboard[] | []>) => {
       state.owners = action.payload;
     },
-    setAdmins: (state, action: PayloadAction<AdminDashboard[]>) => {
+    setAdmins: (state, action: PayloadAction<AdminDashboard[] | []>) => {
       state.admins = action.payload;
     },
-    setCourses: (state, action: PayloadAction<CourseDashboard[]>) => {
+    setCourses: (state, action: PayloadAction<CourseDashboard[] | []>) => {
       state.courses = action.payload;
     },
   },

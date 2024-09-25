@@ -7,7 +7,7 @@
     "build": "prisma generate && next build",
     "start": "next start",
     "lint": "next lint",
-    "pages:build": "bunx @cloudflare/next-on-pages",
+    "pages:build": "bunx @cloudflare/next-on-pages && prisma generate",
     "preview": "bun run pages:build && wrangler pages dev",
     "deploy": "bun run pages:build && wrangler pages deploy",
     "seed": "bunx ./prisma/seed.ts"
@@ -16,7 +16,7 @@
     "seed": "bunx ./prisma/seed.ts"
   },
   "dependencies": {
-    "@prisma/client": "^5.19.1",
+    "@prisma/client": "^5.20.0",
     "@reduxjs/toolkit": "^2.2.7",
     "@supabase/supabase-js": "^2.45.4",
     "@tinymce/tinymce-react": "^5.1.1",

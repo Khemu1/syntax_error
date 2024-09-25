@@ -1,8 +1,8 @@
-import { NextRequest, NextResponse } from "next/server";
-import { dashboardCoursesService } from "../../services/adminService";
+import { NextResponse } from "next/server";
+import { dashboardCoursesService } from "../../services/dashboard";
 import { errorHandler } from "../../error";
 
-export const GET = async (req: NextRequest) => {
+export const GET = async () => {
   try {
     const data = await dashboardCoursesService();
     return NextResponse.json(data, { status: 200 });

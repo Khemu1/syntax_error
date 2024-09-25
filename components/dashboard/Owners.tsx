@@ -20,7 +20,7 @@ const Admins: React.FC = () => {
   const dashboardState = useSelector((state: RootState) => state.dashboard);
 
   useEffect(() => {
-    if (dashboardState.owners.length < 1) {
+    if (dashboardState.owners.length === 0) {
       handleGetOwners();
     } else {
       setallOwners(dashboardState.owners);
@@ -28,7 +28,7 @@ const Admins: React.FC = () => {
   }, [dashboardState.owners, handleGetOwners]);
 
   useEffect(() => {
-    if (data) {
+    if (data && data.length > 0) {
       setallOwners(data);
       dispatch(setOwners(data));
     }

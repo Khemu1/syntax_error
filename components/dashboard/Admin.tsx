@@ -1,7 +1,14 @@
+import { openEditDialog } from "@/store/slices/dialogSlice";
 import { AdminDashboard } from "@/types";
 import React from "react";
+import { useDispatch } from "react-redux";
 
 const Admin: React.FC<{ admin: AdminDashboard }> = ({ admin }) => {
+  const dispatch = useDispatch();
+  const handleEditClick = (e: React.MouseEvent) => {
+    e.stopPropagation();
+    dispatch(openEditDialog(admin));
+  };
   return (
     <>
       <th scope="row" className="px-6 py-4 font-medium text-white ">
@@ -14,12 +21,13 @@ const Admin: React.FC<{ admin: AdminDashboard }> = ({ admin }) => {
         {admin.updatedAt ? new Date(admin.updatedAt).toDateString() : null}
       </td>
       <td className="px-6 py-4 text-right">
-        <a
-          href="#"
+        <button
+          type="button"
+          onClick={handleEditClick}
           className="font-medium text-blue-600 dark:text-blue-500 hover:underline"
         >
           Edit
-        </a>
+        </button>
       </td>
     </>
   );

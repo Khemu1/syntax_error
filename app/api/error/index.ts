@@ -1,6 +1,6 @@
 /* eslint-disable @typescript-eslint/no-explicit-any */
+import { Prisma } from "@prisma/client";
 import { NextResponse } from "next/server";
-
 export class CustomError extends Error {
   message: string;
   statusCode: number;
@@ -58,8 +58,56 @@ export const sendProdError = (error: CustomError) => {
 };
 
 export const errorHandler = (error: any) => {
-  if (error.code === "P2025") {
-    return new CustomError("No matching user found", 404, "Not Found", true);
+  if (error instanceof Prisma.PrismaClientKnownRequestError) {
+    const meta = error.meta as Record<string, string>;
+    const customError = new CustomError(
+      error.message,
+      500,
+      "Prisma Error",
+      true,
+      "",
+      meta
+    );
+    return process.env.NODE_ENV === "development"
+      ? sendDevError(customError)
+      : sendProdError(customError);
+  }
+
+  if (error instanceof Prisma.PrismaClientUnknownRequestError) {
+    const customError = new CustomError(
+      error.message,
+      500,
+      "Prisma Error",
+      true
+    );
+    return process.env.NODE_ENV === "development"
+      ? sendDevError(customError)
+      : sendProdError(customError);
+  }
+
+  if (error instanceof Prisma.PrismaClientInitializationError) {
+    const customError = new CustomError(
+      error.message,
+      500,
+      "Prisma Error",
+      true
+    );
+    return process.env.NODE_ENV === "development"
+      ? sendDevError(customError)
+      : sendProdError(customError);
+  }
+
+  if (error instanceof Prisma.PrismaClientValidationError) {
+    const customError = new CustomError(
+      error.message,
+      400,
+      "Validation Error",
+      true,
+      ""
+    );
+    return process.env.NODE_ENV === "development"
+      ? sendDevError(customError)
+      : sendProdError(customError);
   }
 
   return process.env.NODE_ENV === "development"

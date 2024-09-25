@@ -7,6 +7,8 @@ import { RootState } from "@/store/store";
 import { setAdmins } from "@/store/slices/dashboardSlice";
 import SkeletonTable from "../skeletons/SkeletonTable";
 import Toast from "../Toast";
+import NewAdminDialog from "./DashboardDialog";
+import { openNewAdminDialog } from "@/store/slices/dialogSlice";
 
 const Admins: React.FC = () => {
   const [allAdmins, setAllAdmins] = useState<AdminDashboard[]>([]);
@@ -15,15 +17,12 @@ const Admins: React.FC = () => {
     message: string;
     type: "success" | "error";
   } | null>(null);
-
-  // Hook for deleting admins
   const {
     handleDeleteAdmins,
     loading: deleteLoading,
     error: deleteError,
     success: deleteSuccess,
   } = useDeleteAdmins();
-
   // Hook for fetching admins
   const {
     loading: fetchLoading,
@@ -34,6 +33,7 @@ const Admins: React.FC = () => {
 
   const dispatch = useDispatch();
   const dashboardState = useSelector((state: RootState) => state.dashboard);
+  const dialogState = useSelector((state: RootState) => state.dialog);
 
   // Fetch admins if none are in the dashboard state
   useEffect(() => {
@@ -45,7 +45,7 @@ const Admins: React.FC = () => {
   }, [dashboardState.admins, handleGetAdmins]);
 
   useEffect(() => {
-    if (data) {
+    if (data && data.length > 0) {
       setAllAdmins(data);
       dispatch(setAdmins(data));
     }
@@ -108,11 +108,17 @@ const Admins: React.FC = () => {
 
   return (
     <div className="flex flex-col gap-4">
-      <div className="flex justify-end mb-4">
+      <div className="flex justify-between items-center">
         <button
-          className={`mx text-white ${
+          className="text-white font-semibold bg-blue-600 mb-4 px-4 py-2 rounded-lg shadow-lg"
+          onClick={() => dispatch(openNewAdminDialog())}
+        >
+          New Admin
+        </button>
+        <button
+          className={`mx text-white w-[100px] px-4 py-2  ${
             selectedAdmins.length === 0 ? "bg-gray-950" : "bg-red-600"
-          } font-semibold px-4 py-2 rounded-lg`}
+          } font-semibold rounded-lg`}
           onClick={handleDelete}
           disabled={selectedAdmins.length === 0 || deleteLoading}
         >
@@ -184,6 +190,7 @@ const Admins: React.FC = () => {
       {deleteSuccess && (
         <div className="text-green-500 mt-2">Admins deleted successfully.</div>
       )}
+      {dialogState.isDialogOpen && <NewAdminDialog />}
     </div>
   );
 };

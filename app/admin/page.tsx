@@ -15,17 +15,18 @@ const Admin = () => {
   const routeTo = useRouter();
   const dispatch = useDispatch();
   const authState = useSelector((state: RootState) => state.auth);
-  const [section, setSection] = useState("newCourse"); // Default section
-  const localStorageAuth = localStorage.getItem("userData");
-
+  const [section, setSection] = useState("newCourse");
   useEffect(() => {
+    const localStorageAuth = localStorage.getItem("userData");
     if (localStorageAuth) {
       const { role } = JSON.parse(localStorageAuth);
 
+      // Check if the user is authenticated
       if (!authState.isAuthenticated) {
         dispatch(logout());
       }
 
+      // Role-based navigation
       if (role !== 1 && role !== 2) {
         routeTo.push("/");
       } else {
@@ -36,7 +37,7 @@ const Admin = () => {
     } else {
       routeTo.push("/signin");
     }
-  }, [authState, dispatch, routeTo, localStorageAuth]);
+  }, [authState.isAuthenticated, dispatch, routeTo]);
 
   if (!authState.isAuthenticated) {
     return (
@@ -47,7 +48,7 @@ const Admin = () => {
   }
 
   return (
-    <div className="admin_dashboard">
+    <div className="admin_dashboard relative">
       <div className="mt-5 lg:hidden">
         <button
           className="flex left-4 top-3 w-[32px] h-[32px]"

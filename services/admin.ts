@@ -5,6 +5,7 @@ import {
   CustomErrorResponse,
   MyDataDashboard,
   OwnerDashboard,
+  SignUpProps,
 } from "@/types";
 
 export const getMyInfo = async (): Promise<MyDataDashboard> => {
@@ -174,6 +175,36 @@ export const editAdmin = async (id: number): Promise<AdminDashboard[]> => {
     }
 
     const data: AdminDashboard[] = await response.json();
+    return data;
+  } catch (error) {
+    if (!(error instanceof CustomError)) {
+      throw new CustomError("Network error", 500);
+    }
+    throw error;
+  }
+};
+
+export const createAdmin = async (newAdmin:SignUpProps): Promise<AdminDashboard> => {
+  try {
+    const response = await fetch(`/api/dashboard/admins`, {
+      method: "POST",
+      body: JSON.stringify(newAdmin),
+    });
+
+    if (!response.ok) {
+      const errorData: CustomErrorResponse = await response.json();
+      const err = new CustomError(
+        errorData.message || "edit failed",
+        response.status,
+        "edit",
+        false,
+        errorData.details,
+        errorData.errors
+      );
+      throw err;
+    }
+
+    const data: AdminDashboard = await response.json();
     return data;
   } catch (error) {
     if (!(error instanceof CustomError)) {

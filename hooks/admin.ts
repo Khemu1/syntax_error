@@ -1,12 +1,20 @@
 import { CustomError } from "@/app/api/error";
-import { deleteAminds, getAdmins, getCourses, getMyInfo, getOwners } from "@/services/admin";
+import {
+  createAdmin,
+  deleteAminds,
+  getAdmins,
+  getCourses,
+  getMyInfo,
+  getOwners,
+} from "@/services/admin";
 import {
   AdminDashboard,
   CourseDashboard,
   MyDataDashboard,
   OwnerDashboard,
+  SignUpProps,
 } from "@/types";
-import { useState, useCallback } from "react";
+import { useState, useCallback, useEffect } from "react";
 
 export const useGetMyInfo = () => {
   const [data, setData] = useState<MyDataDashboard | null>(null);
@@ -96,7 +104,7 @@ export const useGetOwners = () => {
 };
 
 export const useGetCourses = () => {
-  const [data, setData] = useState<CourseDashboard[]>([]);
+  const [data, setData] = useState<CourseDashboard[] | null>(null);
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState<string | Record<string, string> | null>(
     null
@@ -135,7 +143,7 @@ export const useDeleteAdmins = () => {
     setSuccess(false);
     try {
       await deleteAminds(Ids);
-      setSuccess(true); 
+      setSuccess(true);
     } catch (err: unknown) {
       if (err instanceof CustomError) {
         if (err.errors) {
@@ -156,4 +164,49 @@ export const useDeleteAdmins = () => {
   };
 
   return { handleDeleteAdmins, loading, error, success };
+};
+
+export const useCreateAdmin = () => {
+  const [loading, setLoading] = useState(false);
+  const [data, setData] = useState<AdminDashboard | null>(null);
+  const [error, setError] = useState<Record<string, string> | null>(null);
+  const [success, setSuccess] = useState<boolean>(false);
+  const handleCreateAdmin = async (data: SignUpProps) => {
+    setLoading(true);
+    setError(null);
+    setSuccess(false);
+    try {
+      setData(await createAdmin(data));
+      setSuccess(true);
+    } catch (err: unknown) {
+      if (err instanceof CustomError) {
+        if (err.errors) {
+          setError(err.errors);
+        } else {
+          setError({
+            message: err.message,
+          });
+        }
+      } else {
+        setError({
+          message: "An unknown error occurred.",
+        });
+      }
+    } finally {
+      setLoading(false);
+    }
+  };
+  useEffect(() => {
+    let timeoutId: NodeJS.Timeout;
+    if (error) {
+      timeoutId = setTimeout(() => {
+        setError(null);
+      }, 3000);
+    }
+    return () => {
+      clearTimeout(timeoutId);
+    };
+  }, [error]);
+
+  return { handleCreateAdmin, loading, error, success, data };
 };

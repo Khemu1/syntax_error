@@ -35,15 +35,15 @@ const Courses: React.FC = () => {
   const dashboardState = useSelector((state: RootState) => state.dashboard);
 
   useEffect(() => {
-    if (dashboardState.courses.length > 0) {
-      setAllCourses(dashboardState.courses);
-    } else {
+    if (dashboardState.courses.length === 0) {
       handleGetCourses();
+    } else {
+      setAllCourses(dashboardState.courses);
     }
   }, [dashboardState.courses, handleGetCourses]);
 
   useEffect(() => {
-    if (data.length > 0) {
+    if (data && data.length > 0) {
       setAllCourses(data);
       dispatch(setCourses(data));
     }

@@ -29,6 +29,8 @@ model User {
   userRole      UserRole?                            // One-to-one relationship with UserRole
 }
 
+
+
 // UserRole model acts as the join table between User and Role
 model UserRole {
   id     Int     @id @default(autoincrement())

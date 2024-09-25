@@ -120,12 +120,20 @@ export const signIn = async (req: NextRequest) => {
   }
 };
 
-export const signUp = async (req: NextRequest) => {
+export const checkAdminData = async (
+  req: NextRequest,
+  authUser: NextResponse
+) => {
   try {
+    const userId = authUser.headers.get("User-Id") as string;
+    const userRole = authUser.headers.get("User-Role") as string;
     const body = await req.json();
     const schema = signUpSchema;
     schema.parse(body);
-    return NextResponse.next();
+    const response = NextResponse.next();
+    response.headers.set("User-Id", userId);
+    response.headers.set("User-Role", userRole);
+    return response;
   } catch (error) {
     const validationErrors = validateWithSchema(error);
     const err = new CustomError(

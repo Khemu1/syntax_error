@@ -1,5 +1,5 @@
 import { NextRequest, NextResponse } from "next/server";
-import { dashboardOwnersService } from "../../services/adminService";
+import { dashboardOwnersService } from "../../services/dashboard";
 import { errorHandler } from "../../error";
 
 export const GET = async (req: NextRequest) => {

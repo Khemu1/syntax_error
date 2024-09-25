@@ -8,7 +8,7 @@ import {
   checkOwnerRole,
   checkDashBoardRoles,
   signIn,
-  signUp,
+  checkAdminData,
 } from "./app/api/middlewars/authMiddleware";
 import { errorHandler } from "./app/api/error";
 
@@ -37,9 +37,6 @@ export async function middleware(req: NextRequest) {
     if (pathname.startsWith("/api/auth/signin")) {
       return signIn(req);
     }
-    if (pathname.startsWith("/api/auth/signup")) {
-      return signUp(req);
-    }
     if (pathname.startsWith("/api/dashboard/courses")) {
       const authUser = await authenticateUser();
       const checkRole = await checkOwnerRole(authUser);
@@ -51,6 +48,10 @@ export async function middleware(req: NextRequest) {
       if (req.method === "DELETE") {
         const checkIds = await checkDeletionIds(req, checkRole);
         return checkIds;
+      }
+      if (req.method === "POST") {
+        const validateNewAdmin = checkAdminData(req, checkRole);
+        return validateNewAdmin;
       }
       return checkRole;
     }

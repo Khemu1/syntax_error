@@ -4,6 +4,12 @@ export interface SignInProps {
   usernameOrEmail: string;
   password: string;
 }
+export interface SignUpProps {
+  username: string;
+  email: string;
+  password: string;
+}
+
 export interface FileUploaderProps {
   file: File | null;
   setFile: (file: File | null) => void;
