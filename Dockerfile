@@ -1,3 +1,4 @@
+#image base
 FROM oven/bun AS build
 
 WORKDIR /app
