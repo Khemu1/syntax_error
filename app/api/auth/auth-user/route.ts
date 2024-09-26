@@ -83,3 +83,16 @@ export const POST = async () => {
     return errorHandler(error);
   }
 };
+
+export const DELETE = () => {
+  try {
+    const response = NextResponse.json({ message: "Sign out successful" });
+
+    response.cookies.set("access_token", "", { expires: new Date(0) });
+    response.cookies.set("refresh_token", "", { expires: new Date(0) });
+
+    return response;
+  } catch (error) {
+    return errorHandler(error);
+  }
+};

@@ -9,11 +9,13 @@ import {
   checkDashBoardRoles,
   signIn,
   checkAdminData,
+  checkAdminForEdit,
 } from "./app/api/middlewars/authMiddleware";
 import { errorHandler } from "./app/api/error";
 
 export async function middleware(req: NextRequest) {
   try {
+    console.log("root middleware");
     const { pathname } = req.nextUrl;
     if (pathname.startsWith("/api/courses")) {
       if (req.method === "POST") {
@@ -27,7 +29,7 @@ export async function middleware(req: NextRequest) {
         const validateIds = await checkDeletionIds(req, checkRole);
         return validateIds;
       }
-      if (req.method === "UPDATE") {
+      if (req.method === "PUT") {
         const authUser = await authenticateUser();
         const checkRole = await checkOwnerRole(authUser);
         const validateIds = await checkDeletionIds(req, checkRole);
@@ -50,8 +52,12 @@ export async function middleware(req: NextRequest) {
         return checkIds;
       }
       if (req.method === "POST") {
-        const validateNewAdmin = checkAdminData(req, checkRole);
+        const validateNewAdmin = await checkAdminData(req, checkRole);
         return validateNewAdmin;
+      }
+      if (req.method === "PUT") {
+        const validateEditAdmin = await checkAdminForEdit(req, checkRole);
+        return validateEditAdmin;
       }
       return checkRole;
     }

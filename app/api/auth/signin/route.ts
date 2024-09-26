@@ -36,7 +36,6 @@ export const POST = async (req: NextRequest) => {
     // Set cookies
     response.cookies.set("access_token", token, accessCookieOptions);
     response.cookies.set("refresh_token", refreshToken, refreshCookieOptions);
-    response.cookies.delete("User-Id");
     return response;
   } catch (error) {
     console.log(error); // Log the error if something goes wrong

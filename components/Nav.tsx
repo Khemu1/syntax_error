@@ -1,18 +1,28 @@
 "use client";
 import { useAuthUser } from "@/hooks/auth";
 import { RootState } from "@/store/store";
-import { useSelector } from "react-redux";
+import { useDispatch, useSelector } from "react-redux";
 import Image from "next/image";
 import Link from "next/link";
 import { useEffect, useRef, useState } from "react";
+import { logout } from "@/store/slices/authSlice";
+import { signoutUser } from "@/services/auth";
 
 const Nav = () => {
   const [isMenuOpen, setIsMenuOpen] = useState(false);
   const navRef = useRef<HTMLElement>(null);
   const menuRef = useRef<HTMLUListElement>(null);
-  // const dispatch = useDispatch();
+  const dispatch = useDispatch();
   const authState = useSelector((state: RootState) => state.auth);
-
+  const handleSignOut = async () => {
+    try {
+      console.log("click");
+      await signoutUser();
+      dispatch(logout());
+    } catch (error) {
+      console.log(error);
+    }
+  };
   useAuthUser();
 
   useEffect(() => {
@@ -101,7 +111,7 @@ const Nav = () => {
               <Link href={"/signin"}>Sign In</Link>
             </li>
           ) : (
-            <li className="nav_buttons">
+            <li className="nav_buttons" onClick={handleSignOut}>
               <button type="button">Sign Out</button>
             </li>
           )}
@@ -135,7 +145,7 @@ const Nav = () => {
                 <Link href={"/signin"}>Sign In</Link>
               </li>
             ) : (
-              <li>
+              <li onClick={handleSignOut}>
                 <button type="button">Sign Out</button>
               </li>
             )}

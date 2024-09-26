@@ -130,13 +130,13 @@ const Admins: React.FC = () => {
           <thead className="text-xs text-gray-700 uppercase bg-gray-50 dark:bg-gray-700 dark:text-gray-400">
             <tr>
               <th scope="col" className="px-6 py-3">
-                Email
+                ID
               </th>
               <th scope="col" className="px-6 py-3">
                 Username
               </th>
               <th scope="col" className="px-6 py-3">
-                ID
+                Email
               </th>
               <th scope="col" className="px-6 py-3">
                 Created At
@@ -161,7 +161,7 @@ const Admins: React.FC = () => {
                       : "bg-white dark:bg-gray-800 hover:bg-gray-600"
                   }`}
                 >
-                  <Admin admin={admin} />
+                  <Admin key={admin.id} admin={admin} />
                 </tr>
               ))
             ) : (

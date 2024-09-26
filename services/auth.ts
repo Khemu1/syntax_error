@@ -68,3 +68,35 @@ export const authUser = async (): Promise<SignInResponseProps> => {
     throw error;
   }
 };
+
+export const signoutUser = async () => {
+  try {
+    const response = await fetch("/api/auth/auth-user", {
+      method: "DELETE",
+      headers: {
+        "Content-Type": "application/json",
+      },
+      credentials: "include",
+    });
+
+    if (!response.ok) {
+      const errorData: CustomErrorResponse = await response.json();
+      const err = new CustomError(
+        errorData.message || "Sign-out failed",
+        response.status,
+        "SignOutError",
+        false,
+        errorData.details,
+        errorData.errors
+      );
+      throw err;
+    }
+
+    return;
+  } catch (error) {
+    if (!(error instanceof CustomError)) {
+      throw new CustomError("Network error", 500);
+    }
+    throw error;
+  }
+};

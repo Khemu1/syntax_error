@@ -1,6 +1,6 @@
 import { PrismaClient } from "@prisma/client";
 import { CustomError } from "../error";
-import { SignUpProps } from "@/types";
+import { EditAdminProps, SignUpProps } from "@/types";
 import bcrypt from "bcrypt";
 
 const prisma = new PrismaClient();
@@ -58,6 +58,7 @@ export const dashboardAdminsService = async () => {
     throw error;
   }
 };
+
 export const dashboardNewAdminsService = async (adminData: SignUpProps) => {
   try {
     const existingUser = await prisma.user.findFirst({
@@ -127,6 +128,59 @@ export const dashboardNewAdminsService = async (adminData: SignUpProps) => {
     };
   } catch (error) {
     throw error;
+  }
+};
+
+export const dashboardEditAdminsService = async (
+  id: number,
+  adminData: EditAdminProps
+) => {
+  try {
+    const findAdmin = await prisma.user.findFirst({ where: { id: id } });
+    if (!findAdmin) {
+      throw new CustomError("Admin not found", 404, "admin lookup", true);
+    }
+
+    const actualValues: Record<string, string> = {};
+
+    for (const [key, value] of Object.entries(adminData)) {
+      if (key in findAdmin) {
+        if (value !== findAdmin[key as keyof typeof findAdmin]) {
+          actualValues[key] = value;
+        }
+      }
+    }
+
+    if (Object.keys(actualValues).length === 0) {
+      throw new CustomError("No changes to update", 400, "admin update", true);
+    }
+    console.log(actualValues, adminData);
+    const newAdmin = await prisma.user.update({
+      where: { id: findAdmin.id },
+      data: {
+        ...actualValues,
+        updatedAt: new Date(),
+      },
+    });
+
+    return {
+      username: newAdmin.username,
+      id: newAdmin.id,
+      email: newAdmin.email,
+      createdAt: newAdmin.createdAt,
+      updatedAt: newAdmin.updatedAt,
+    };
+  } catch (error) {
+    if (error instanceof CustomError) {
+      throw error;
+    }
+    console.log(error);
+    throw new CustomError(
+      "An error occurred while updating the admin",
+      500,
+      "update admin",
+      true
+    );
   }
 };
 

@@ -11,7 +11,7 @@ const myDataInitState: MyDataDashboard = {
   id: -1,
   username: "",
   email: "",
-  createdAt: new Date(),
+  createdAt: new Date().toISOString(),
 };
 const ownersInitState: OwnerDashboard[] = [];
 const adminsInitState: AdminDashboard[] = [];

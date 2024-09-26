@@ -30,7 +30,7 @@ const SignIn = () => {
     }
   };
   return (
-    <div className="flex flex-col w-full h-full bg-base-200 justify-center items-center gap-6">
+    <div className="flex flex-1 flex-col w-full h-full bg-base-200 justify-center items-center gap-6">
       <div className="flex flex-col items-center bg-base-100 shadow-xl rounded-lg p-6 w-[85dvw] sm:w-full sm:max-w-sm">
         <div className="flex flex-col items-center text-center mb-5">
           <Image

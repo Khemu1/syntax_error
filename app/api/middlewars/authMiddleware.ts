@@ -10,8 +10,11 @@ import {
 import {
   signInSchema,
   signUpSchema,
+  updatedAdminSchemaBackend,
   validateWithSchema,
 } from "@/utils/validations";
+import { EditAdminProps } from "@/types";
+import { ZodError } from "zod";
 
 export const authenticateUser = async () => {
   try {
@@ -111,7 +114,7 @@ export const signIn = async (req: NextRequest) => {
     const err = new CustomError(
       "Validation Error",
       400,
-      "validation error",
+      "middleware",
       false,
       "There were errors with the submitted data.",
       validationErrors
@@ -139,12 +142,54 @@ export const checkAdminData = async (
     const err = new CustomError(
       "Validation Error",
       400,
-      "validation error",
+      "middleware",
       false,
       "There were errors with the submitted data.",
       validationErrors
     );
     throw err;
+  }
+};
+export const checkAdminForEdit = async (
+  req: NextRequest,
+  authUser: NextResponse
+) => {
+  try {
+    const userId = authUser.headers.get("User-Id") as string;
+    const userRole = authUser.headers.get("User-Role") as string;
+    const body = (await req.json()) as { admin: EditAdminProps; id: number };
+    if (!body || isNaN(+body.id) || !body.admin) {
+      throw new CustomError("Invalid data", 400, "validation error");
+    }
+    const schema = updatedAdminSchemaBackend();
+    // eslint-disable-next-line @typescript-eslint/no-explicit-any
+    const actualValues: Record<string, any> = {};
+    for (const [key, value] of Object.entries(body.admin)) {
+      if (value !== null && value !== undefined && value.trim().length !== 0) {
+        actualValues[key] = value;
+      }
+    }
+    console.log(actualValues, body.admin);
+    schema.parse(actualValues);
+    const response = NextResponse.next();
+    response.headers.set("User-Id", userId);
+    response.headers.set("User-Role", userRole);
+    return response;
+  } catch (error) {
+    if (error instanceof ZodError) {
+      const validationErrors = validateWithSchema(error);
+      console.log(validationErrors);
+      const err = new CustomError(
+        "Validation Error",
+        400,
+        "middleware",
+        false,
+        "There were errors with the submitted data.",
+        validationErrors
+      );
+      throw err;
+    }
+    throw error;
   }
 };
 export const checkDashBoardRoles = async (authUser: NextResponse) => {

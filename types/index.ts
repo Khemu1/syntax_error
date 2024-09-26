@@ -105,7 +105,7 @@ export type MyDataDashboard = {
   id: number;
   username: string;
   email: string;
-  createdAt: Date;
+  createdAt: string | Date;
 };
 
 export type OwnerDashboard = {
@@ -139,4 +139,10 @@ export interface ToastProps {
   type: "success" | "error";
   duration?: number;
   onClose: () => void;
+}
+
+export interface EditAdminProps {
+  username: string | null;
+  email: string | null;
+  password: string | null;
 }

@@ -2,10 +2,11 @@ import { NextRequest, NextResponse } from "next/server";
 import {
   dashboardAdminsService,
   dashboardDeleteAdminsService,
+  dashboardEditAdminsService,
   dashboardNewAdminsService,
 } from "../../services/dashboard";
 import { errorHandler } from "../../error";
-import { SignUpProps } from "@/types";
+import { EditAdminProps, SignUpProps } from "@/types";
 
 export const GET = async () => {
   try {
@@ -35,6 +36,16 @@ export const POST = async (req: NextRequest) => {
     const data = (await req.json()) as SignUpProps;
     const newAdmin = await dashboardNewAdminsService(data);
     return NextResponse.json(newAdmin, { status: 201 });
+  } catch (error) {
+    return errorHandler(error);
+  }
+};
+
+export const PUT = async (req: NextRequest) => {
+  try {
+    const data = (await req.json()) as { admin: EditAdminProps , id: number };
+    const newAdmin = await dashboardEditAdminsService(+data.id, data.admin);
+    return NextResponse.json(newAdmin, { status: 200 });
   } catch (error) {
     return errorHandler(error);
   }

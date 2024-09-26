@@ -77,7 +77,7 @@ export const useAuthUser = () => {
       dispatch(login({ username, userId, role }));
     } catch (err) {
       localStorage.removeItem("userData");
-      if (!pathName.startsWith("/signin")) {
+      if (pathName.startsWith("/admin")) {
         routeTo.push("/signin");
       }
     }
@@ -85,7 +85,7 @@ export const useAuthUser = () => {
 
   useEffect(() => {
     const isAuthPage =
-      pathName.startsWith("/signin");
+      pathName.startsWith("/signin") ;
     if (!isAuthPage) {
       handleSignIn();
     }

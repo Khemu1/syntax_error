@@ -3,6 +3,7 @@ import {
   AdminDashboard,
   CourseDashboard,
   CustomErrorResponse,
+  EditAdminProps,
   MyDataDashboard,
   OwnerDashboard,
   SignUpProps,
@@ -154,15 +155,19 @@ export const deleteAminds = async (
   }
 };
 
-export const editAdmin = async (id: number): Promise<AdminDashboard[]> => {
+export const editAdmin = async (
+  id: number,
+  adminData: EditAdminProps
+): Promise<AdminDashboard> => {
   try {
-    const response = await fetch(`/api/dashboard/admins/${id}`, {
-      method: "UPDATE",
-      body: JSON.stringify(id),
+    const response = await fetch(`/api/dashboard/admins`, {
+      method: "PUT",
+      body: JSON.stringify({ admin: adminData, id: id }),
     });
 
     if (!response.ok) {
       const errorData: CustomErrorResponse = await response.json();
+      console.log(errorData);
       const err = new CustomError(
         errorData.message || "edit failed",
         response.status,
@@ -174,9 +179,10 @@ export const editAdmin = async (id: number): Promise<AdminDashboard[]> => {
       throw err;
     }
 
-    const data: AdminDashboard[] = await response.json();
+    const data: AdminDashboard = await response.json();
     return data;
   } catch (error) {
+    console.log(error);
     if (!(error instanceof CustomError)) {
       throw new CustomError("Network error", 500);
     }
@@ -184,7 +190,9 @@ export const editAdmin = async (id: number): Promise<AdminDashboard[]> => {
   }
 };
 
-export const createAdmin = async (newAdmin:SignUpProps): Promise<AdminDashboard> => {
+export const createAdmin = async (
+  newAdmin: SignUpProps
+): Promise<AdminDashboard> => {
   try {
     const response = await fetch(`/api/dashboard/admins`, {
       method: "POST",

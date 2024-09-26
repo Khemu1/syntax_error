@@ -2,6 +2,7 @@ import { CustomError } from "@/app/api/error";
 import {
   createAdmin,
   deleteAminds,
+  editAdmin,
   getAdmins,
   getCourses,
   getMyInfo,
@@ -10,6 +11,7 @@ import {
 import {
   AdminDashboard,
   CourseDashboard,
+  EditAdminProps,
   MyDataDashboard,
   OwnerDashboard,
   SignUpProps,
@@ -209,4 +211,49 @@ export const useCreateAdmin = () => {
   }, [error]);
 
   return { handleCreateAdmin, loading, error, success, data };
+};
+
+export const useEditAdmin = () => {
+  const [loading, setLoading] = useState(false);
+  const [data, setData] = useState<AdminDashboard | null>(null);
+  const [error, setError] = useState<Record<string, string> | null>(null);
+  const [success, setSuccess] = useState<boolean>(false);
+  const handleEditAdmin = async (id: number, data: EditAdminProps) => {
+    setLoading(true);
+    setError(null);
+    setSuccess(false);
+    try {
+      setData(await editAdmin(id, data));
+      setSuccess(true);
+    } catch (err: unknown) {
+      if (err instanceof CustomError) {
+        if (err.errors) {
+          setError(err.errors);
+        } else {
+          setError({
+            message: err.message,
+          });
+        }
+      } else {
+        setError({
+          message: "An unknown error occurred.",
+        });
+      }
+    } finally {
+      setLoading(false);
+    }
+  };
+  useEffect(() => {
+    let timeoutId: NodeJS.Timeout;
+    if (error) {
+      timeoutId = setTimeout(() => {
+        setError(null);
+      }, 3000);
+    }
+    return () => {
+      clearTimeout(timeoutId);
+    };
+  }, [error]);
+
+  return { handleEditAdmin, loading, error, success, data };
 };
