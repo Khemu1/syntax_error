@@ -8,7 +8,6 @@ import {
 import { errorHandler } from "../../error";
 import { SignInProps } from "@/types";
 import { signInService } from "../../services/authService";
- export const runtime = 'edge';
 export const POST = async (req: NextRequest) => {
   try {
     const body = (await req.json()) as SignInProps;

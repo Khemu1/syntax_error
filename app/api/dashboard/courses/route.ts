@@ -1,7 +1,7 @@
 import {  NextResponse } from "next/server";
 import { dashboardCoursesService } from "../../services/dashboard";
 import { errorHandler } from "../../error";
- export const runtime = 'edge';
+
 export const GET = async () => {
   try {
     const data = await dashboardCoursesService();

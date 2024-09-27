@@ -10,6 +10,7 @@ import {
   signIn,
   checkAdminData,
   checkAdminForEdit,
+  validateDashBoardAccountEdit,
 } from "./app/api/middlewars/authMiddleware";
 import { errorHandler } from "./app/api/error";
 
@@ -61,6 +62,11 @@ export async function middleware(req: NextRequest) {
       }
       return checkRole;
     }
+    if (pathname.startsWith("/api/dashboard/myinfo")) {
+      const authUser = await authenticateUser();
+      const checkRole = await checkOwnerRole(authUser);
+      return checkRole;
+    }
     if (pathname.startsWith("/api/dashboard/owners")) {
       const authUser = await authenticateUser();
       const checkRole = await checkOwnerRole(authUser);
@@ -68,8 +74,8 @@ export async function middleware(req: NextRequest) {
     }
     if (pathname.startsWith("/api/dashboard/myinfo")) {
       const authUser = await authenticateUser();
-      const checkRoles = await checkDashBoardRoles(authUser);
-      return checkRoles;
+      const checkRoles= await checkDashBoardRoles(authUser);
+      return validateDashBoardAccountEdit(req, checkRoles);
     }
     return NextResponse.next();
   } catch (error) {

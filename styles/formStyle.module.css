@@ -9,9 +9,8 @@
 .form input {
   padding: 9px;
   border-radius: 7px;
-  border-bottom: 3px solid gray;
   width: 100%;
-  transition: 250ms ease-in-out;
+  transition: 100ms ease-in-out;
 }
 
 .form label {
@@ -37,7 +36,7 @@
 }
 .form input:focus-within {
   outline: none;
-  border-bottom-color: #10669c;
+  box-shadow: 0 0 0 2px rgb(25, 106, 238);
 }
 .form .input_container {
   display: flex;

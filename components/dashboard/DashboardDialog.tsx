@@ -5,6 +5,7 @@ import { RootState } from "@/store/store";
 import { closeDialog } from "@/store/slices/dialogSlice";
 import EditAdmin from "./EditAdmin";
 import EditCourse from "./EditCourse";
+import EditMyAccount from "./EditMyAccount";
 
 const DashboardDialog: React.FC = () => {
   const dispatch = useDispatch();
@@ -25,6 +26,7 @@ const DashboardDialog: React.FC = () => {
         {dialogState.dialogType === "newAdmin" && <NewAdmin />}
         {dialogState.dialogType === "edit" && <EditAdmin />}
         {dialogState.dialogType === "editCourse" && <EditCourse />}
+        {dialogState.dialogType === "myData" && <EditMyAccount />}
       </div>
     </div>
   );

@@ -1,10 +1,11 @@
-import { AdminDashboard } from "@/types";
+import { AdminDashboard, MyDataDashboard } from "@/types";
 import { createSlice, PayloadAction } from "@reduxjs/toolkit";
 
 interface DialogState {
   isDialogOpen: boolean;
-  dialogType: "edit" | "newAdmin" | "editCourse" | "";
+  dialogType: "edit" | "newAdmin" | "editCourse" | "myData" | "";
   editContent: AdminDashboard | null; // Data for editing an admin
+  myData: MyDataDashboard | null;
   courseId: number | null;
 }
 
@@ -13,6 +14,7 @@ const initialState: DialogState = {
   dialogType: "",
   editContent: null,
   courseId: null,
+  myData: null,
 };
 
 const dialogSlice = createSlice({
@@ -34,6 +36,11 @@ const dialogSlice = createSlice({
       state.dialogType = "editCourse";
       state.courseId = action.payload;
     },
+    openMyDataDialog(state, action: PayloadAction<MyDataDashboard>) {
+      state.isDialogOpen = true;
+      state.dialogType = "myData";
+      state.myData = action.payload;
+    },
     closeDialog(state) {
       state.isDialogOpen = false;
       state.dialogType = "";
@@ -48,6 +55,7 @@ export const {
   openEditCourseDialog,
   openNewAdminDialog,
   closeDialog,
+  openMyDataDialog,
 } = dialogSlice.actions;
 
 export default dialogSlice.reducer;

@@ -106,10 +106,8 @@ export interface PublicCourseProps {
 }
 
 export type MyDataDashboard = {
-  id: number;
   username: string;
   email: string;
-  createdAt: string | Date;
 };
 
 export type OwnerDashboard = {
@@ -127,6 +125,12 @@ export type AdminDashboard = {
   createdAt: Date;
   updatedAt: Date;
 };
+
+export interface EditMyAccountProps {
+  username?: string;
+  email?: string;
+  password?: string;
+}
 
 export type CourseDashboard = {
   id: number;

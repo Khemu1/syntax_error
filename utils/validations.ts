@@ -152,16 +152,6 @@ export const signUpSchema = object({
   }).min(8, { message: errorMessages.password.min }),
 });
 
-export const updateEmailSchema = (email: string) => {
-  return object({
-    email: string({
-      required_error: errorMessages.email.required,
-    }),
-  }).refine((val) => val.email === email, {
-    message: "Duplicate email Please enter a valid one",
-    path: ["email"],
-  });
-};
 
 export const updatedAdminSchema = (email?: string, username?: string) => {
   return object({
@@ -205,6 +195,81 @@ export const updatedAdminSchema = (email?: string, username?: string) => {
       }
     });
 };
+
+export const updateMyAccount = (email?: string, username?: string) => {
+  return object({
+    username: string({
+      required_error: errorMessages.username.required,
+    }).optional(),
+
+    email: string({
+      required_error: errorMessages.email.required,
+    })
+      .email({ message: errorMessages.email.invalid })
+      .optional(),
+
+    password: string()
+      .min(8, { message: errorMessages.password.min })
+      .optional(),
+  })
+    .refine((val) => val.username !== username, {
+      message: "Duplicate username. Please enter a valid one.",
+      path: ["username"],
+    })
+    .refine((val) => val.email !== email, {
+      message: "Duplicate email. Please enter a valid one.",
+      path: ["email"],
+    })
+    .refine((val) => val.password !== email, {
+      message: "Password cannot be the same as the email.",
+      path: ["password"],
+    })
+    .superRefine((val, ctx) => {
+      const emptyFields = [];
+      if (!val.username && !val.password && !val.email) {
+        emptyFields.push("allFields");
+      }
+      if (emptyFields.length > 0) {
+        ctx.addIssue({
+          code: "custom",
+          message: "Please fill in at least one field.",
+          path: ["emptyFields"],
+        });
+      }
+    });
+};
+
+export const updateMyAccountBackend = () => {
+  return object({
+    username: string({
+      required_error: errorMessages.username.required,
+    }).optional(),
+
+    email: string({
+      required_error: errorMessages.email.required,
+    })
+      .email({ message: errorMessages.email.invalid })
+      .optional(),
+
+    password: string()
+      .min(8, { message: errorMessages.password.min })
+      .optional(),
+  }).superRefine((val, ctx) => {
+    const emptyFields = [];
+    if (!val.username && !val.password && !val.email) {
+      emptyFields.push("allFields");
+    }
+    if (emptyFields.length > 0) {
+      ctx.addIssue({
+        code: "custom",
+        message: "Please fill in at least one field.",
+        path: ["emptyFields"],
+      });
+    }
+  });
+};
+
+
 
 export const updatedAdminSchemaBackend = () => {
   return object({

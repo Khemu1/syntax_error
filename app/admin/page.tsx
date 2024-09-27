@@ -33,7 +33,7 @@ const Admin = () => {
         routeTo.push("/");
       } else {
         if (role === 1) {
-          setSection("courses");
+          setSection("myaccount");
         }
       }
     } else {

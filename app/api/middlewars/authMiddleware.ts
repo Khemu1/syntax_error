@@ -11,9 +11,10 @@ import {
   signInSchema,
   signUpSchema,
   updatedAdminSchemaBackend,
+  updateMyAccountBackend,
   validateWithSchema,
 } from "@/utils/validations";
-import { EditAdminProps } from "@/types";
+import { EditAdminProps, EditMyAccountProps } from "@/types";
 import { ZodError } from "zod";
 
 export const authenticateUser = async () => {
@@ -169,7 +170,6 @@ export const checkAdminForEdit = async (
         actualValues[key] = value;
       }
     }
-    console.log(actualValues, body.admin);
     schema.parse(actualValues);
     const response = NextResponse.next();
     response.headers.set("User-Id", userId);
@@ -216,4 +216,42 @@ export const checkOwnerRole = async (authUser: NextResponse) => {
   response.headers.set("User-Id", userId);
   response.headers.set("User-Role", userRole);
   return response;
+};
+
+export const validateDashBoardAccountEdit = async (
+  req: NextRequest,
+  authUser: NextResponse
+) => {
+  try {
+    const userId = authUser.headers.get("User-Id") as string;
+
+    const schema = updateMyAccountBackend();
+    const body = (await req.json()) as EditMyAccountProps;
+    
+    const actualValues: Record<string, string> = {};
+
+    for (const [key, value] of Object.entries(body)) {
+      if (value !== null && value !== undefined && value.trim().length !== 0) {
+        actualValues[key] = value;
+      }
+    }
+    schema.parse(body);
+    const response = NextResponse.next();
+    response.headers.set("User-Id", userId);
+    return response;
+  } catch (error) {
+    if (error instanceof ZodError) {
+      const validationErrors = validateWithSchema(error);
+      console.log(validationErrors);
+      throw new CustomError(
+        "Validation Error",
+        400,
+        "middleware",
+        false,
+        "There were errors with the submitted data.",
+        validationErrors
+      );
+    }
+    throw error;
+  }
 };

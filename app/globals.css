@@ -308,3 +308,13 @@ footer {
     left: 100%;
   }
 }
+
+.profile_input_container {
+  @apply flex flex-col gap-4 justify-between flex-wrap;
+}
+.profile_input_container label {
+  @apply font-semibold;
+}
+.profile_input {
+  @apply w-[250px] p-3 rounded-md font-semibold  bg-base-300 shadow-md  transition-all focus:outline-none focus:ring-2 focus:ring-blue-500;
+}

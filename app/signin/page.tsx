@@ -126,7 +126,7 @@ const SignIn = () => {
             {loading ? (
               <span className="loading loading-spinner loading-md"></span>
             ) : (
-              "Submit"
+              "Sign In"
             )}
           </button>
         </form>

@@ -4,6 +4,7 @@ import {
   deleteAminds,
   editAdmin,
   editDashboardCourse,
+  editMyInfo,
   getAdmins,
   getCourseForEdit,
   getCourses,
@@ -15,6 +16,7 @@ import {
   CourseDashboard,
   EditAdminProps,
   EditCourseResponse,
+  EditMyAccountProps,
   MyDataDashboard,
   OwnerDashboard,
   PublicCourseProps,
@@ -22,34 +24,7 @@ import {
 } from "@/types";
 import { useState, useCallback, useEffect } from "react";
 
-export const useGetMyInfo = () => {
-  const [data, setData] = useState<MyDataDashboard | null>(null);
-  const [loading, setLoading] = useState(false);
-  const [error, setError] = useState<string | Record<string, string> | null>(
-    null
-  );
-  const [success, setSuccess] = useState<boolean>(false);
 
-  const handleGetMyInfo = useCallback(async () => {
-    setLoading(true);
-    setError(null);
-    setSuccess(false);
-    try {
-      setSuccess(true);
-      setData(await getMyInfo());
-    } catch (err: unknown) {
-      if (err instanceof CustomError) {
-        setError(err.errors || { message: err.message });
-      } else {
-        setError({ message: "An unknown error occurred." });
-      }
-    } finally {
-      setLoading(false);
-    }
-  }, []);
-
-  return { handleGetMyInfo, loading, error, success, data };
-};
 
 export const useGetAdmins = () => {
   const [data, setData] = useState<AdminDashboard[] | null>(null);
@@ -340,4 +315,97 @@ export const useEditDashboardCourse = () => {
   }, [error]);
 
   return { data, handleEditCourse, loading, error, success };
+};
+
+export const useGetMyInfo = () => {
+  const [data, setData] = useState<MyDataDashboard | null>(null);
+  const [loading, setLoading] = useState(false);
+  const [error, setError] = useState<Record<string, string> | null>(null);
+  const [success, setSuccess] = useState<boolean>(false);
+  const handleGetMyInfo = useCallback(async () => {
+    setLoading(true);
+    setError(null);
+    setSuccess(false);
+    try {
+      setData(await getMyInfo());
+      setSuccess(true);
+    } catch (err: unknown) {
+      if (err instanceof CustomError) {
+        if (err.errors) {
+          setError(err.errors);
+        } else {
+          setError({
+            message: err.message,
+          });
+        }
+      } else {
+        setError({
+          message: "An unknown error occurred.",
+        });
+      }
+    } finally {
+      setLoading(false);
+    }
+  }, []);
+
+  useEffect(() => {
+    let timeoutId: NodeJS.Timeout;
+    if (error) {
+      timeoutId = setTimeout(() => {
+        setError(null);
+      }, 3000);
+    }
+    return () => {
+      clearTimeout(timeoutId);
+    };
+  }, [error]);
+
+  return { data, handleGetMyInfo, loading, error, success };
+};
+
+
+export const useEditMyInfo = () => {
+  const [data, setData] = useState<MyDataDashboard | null>(null);
+  const [loading, setLoading] = useState(false);
+  const [error, setError] = useState<Record<string, string> | null>(null);
+  const [success, setSuccess] = useState<boolean>(false);
+  const handleEditMyInfo = useCallback(async (myData:EditMyAccountProps) => {
+    setLoading(true);
+    setError(null);
+    setSuccess(false);
+    try {
+      setData(await editMyInfo(myData));
+      setSuccess(true);
+    } catch (err: unknown) {
+      if (err instanceof CustomError) {
+        if (err.errors) {
+          setError(err.errors);
+        } else {
+          setError({
+            message: err.message,
+          });
+        }
+      } else {
+        setError({
+          message: "An unknown error occurred.",
+        });
+      }
+    } finally {
+      setLoading(false);
+    }
+  }, []);
+
+  useEffect(() => {
+    let timeoutId: NodeJS.Timeout;
+    if (error) {
+      timeoutId = setTimeout(() => {
+        setError(null);
+      }, 3000);
+    }
+    return () => {
+      clearTimeout(timeoutId);
+    };
+  }, [error]);
+
+  return { data, handleEditMyInfo, loading, error, success };
 };

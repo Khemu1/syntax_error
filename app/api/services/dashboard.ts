@@ -1,8 +1,14 @@
 import { PrismaClient } from "@prisma/client";
 import { CustomError } from "../error";
-import { CourseModel, EditAdminProps, SignUpProps } from "@/types";
+import {
+  CourseModel,
+  EditAdminProps,
+  EditMyAccountProps,
+  SignUpProps,
+} from "@/types";
 import bcrypt from "bcrypt";
 import { deleteImgur, uploadToImgur } from "./imgurServices";
+import { console } from "inspector";
 
 const prisma = new PrismaClient();
 
@@ -355,6 +361,10 @@ export const dashboardEditAdminsService = async (
         }
       }
     }
+    if (adminData.password) {
+      const hashedPassword = bcrypt.hashSync(adminData.password, 10);
+      actualValues.passwordHash = hashedPassword;
+    }
 
     if (Object.keys(actualValues).length === 0) {
       throw new CustomError("No changes to update", 400, "admin update", true);
@@ -426,7 +436,6 @@ export const dashboardMyDataService = async (id: number) => {
     const ownerData = await prisma.user.findUnique({
       where: { id },
       select: {
-        id: true,
         username: true,
         email: true,
         createdAt: true,
@@ -437,6 +446,42 @@ export const dashboardMyDataService = async (id: number) => {
     }
 
     return ownerData;
+  } catch (error) {
+    throw error;
+  }
+};
+
+export const dahsboardEditMyAccount = async (
+  data: EditMyAccountProps,
+  id: number
+) => {
+  try {
+    console.log("meme", data);
+    const ownerData = await prisma.user.findUnique({
+      where: { id },
+    });
+    if (!ownerData) {
+      throw new CustomError("Owner data not found", 404, "user lookup", true);
+    }
+    const actualValues: Record<string, string> = {};
+
+    for (const [key, value] of Object.entries(data)) {
+      if (value !== null && value !== undefined && value.trim().length !== 0) {
+        actualValues[key] = value;
+      }
+    }
+    if (data.password) {
+      const hashedPassword = bcrypt.hashSync(data.password, 10);
+      actualValues.passwordHash = hashedPassword;
+    }
+    const newInfo = await prisma.user.update({
+      where: { id },
+      data: {
+        ...data,
+        updatedAt: new Date(),
+      },
+    });
+    return newInfo;
   } catch (error) {
     throw error;
   }

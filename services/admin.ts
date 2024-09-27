@@ -5,6 +5,7 @@ import {
   CustomErrorResponse,
   EditAdminProps,
   EditCourseResponse,
+  EditMyAccountProps,
   MyDataDashboard,
   OwnerDashboard,
   PublicCourseProps,
@@ -15,6 +16,38 @@ export const getMyInfo = async (): Promise<MyDataDashboard> => {
   try {
     const response = await fetch("/api/dashboard/myinfo", {
       method: "GET",
+    });
+
+    if (!response.ok) {
+      const errorData: CustomErrorResponse = await response.json();
+      const err = new CustomError(
+        errorData.message || "data fetch failed",
+        response.status,
+        "data fetch",
+        false,
+        errorData.details,
+        errorData.errors
+      );
+      throw err;
+    }
+
+    const data: MyDataDashboard = await response.json();
+    return data;
+  } catch (error) {
+    if (!(error instanceof CustomError)) {
+      throw new CustomError("Network error", 500);
+    }
+    throw error;
+  }
+};
+
+export const editMyInfo = async (
+  myData: EditMyAccountProps
+): Promise<MyDataDashboard> => {
+  try {
+    const response = await fetch("/api/dashboard/myinfo", {
+      method: "PUT",
+      body: JSON.stringify(myData),
     });
 
     if (!response.ok) {
