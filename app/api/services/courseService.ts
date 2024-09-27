@@ -2,7 +2,6 @@ import { NewCourseProps } from "@/types";
 import { PrismaClient } from "@prisma/client";
 import { CustomError } from "../error";
 import { uploadToImgur } from "./imgurServices";
-import { title } from "process";
 const prisma = new PrismaClient();
 
 export const addCourseService = async (
