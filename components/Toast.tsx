@@ -1,6 +1,6 @@
 // Toast.tsx
 import { ToastProps } from "@/types";
-import React, { useEffect, useState } from "react";
+import React, { useEffect } from "react";
 
 const Toast: React.FC<ToastProps> = ({
   message,

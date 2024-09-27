@@ -42,7 +42,7 @@ export const PUT = async (req: NextRequest, { params }: Props) => {
   }
 };
 
-export const processFormData = (data: FormData) => {
+const processFormData = (data: FormData) => {
   return Array.from(data.entries()).reduce((acc, [key, value]) => {
     if (typeof value === "string") {
       const trimmedValue = value.trim();
@@ -61,7 +61,7 @@ export const processFormData = (data: FormData) => {
   }, {} as Record<string, string | number | object>);
 };
 
-export const validateCourseForEdit = async (form: FormData) => {
+const validateCourseForEdit = async (form: FormData) => {
   try {
     if (!form) {
       throw new CustomError("Invalid data", 400, "validation error");

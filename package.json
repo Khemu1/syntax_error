@@ -7,9 +7,9 @@
     "build": "prisma generate && next build",
     "start": "next start",
     "lint": "next lint",
-    "pages:build": "bunx @cloudflare/next-on-pages && prisma generate",
-    "preview": "bun run pages:build && wrangler pages dev",
-    "deploy": "bun run pages:build && wrangler pages deploy",
+    "pages:build": "npx @cloudflare/next-on-pages",
+    "preview": "npm run pages:build && wrangler pages dev",
+    "deploy": "npm run pages:build && wrangler pages deploy",
     "seed": "bunx ./prisma/seed.ts"
   },
   "prisma": {
@@ -43,7 +43,7 @@
     "zod": "^3.23.8"
   },
   "devDependencies": {
-    "@cloudflare/next-on-pages": "^1.13.2",
+    "@cloudflare/next-on-pages": "^1.13.3",
     "@types/formidable": "^3.4.5",
     "@types/multer": "^1.4.12",
     "@types/node": "^22.5.5",

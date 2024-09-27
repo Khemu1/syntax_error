@@ -10,6 +10,7 @@ import Admins from "@/components/dashboard/Admins";
 import { logout } from "@/store/slices/authSlice";
 import Owners from "@/components/dashboard/Owners";
 import MyAccount from "@/components/dashboard/MyAccount";
+export const runtime = "edge";
 
 const Admin = () => {
   const [isSideBarOpen, setIsSideBarOpen] = useState(false);

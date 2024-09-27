@@ -1,10 +1,7 @@
 "use client";
 
-import { useEffect } from "react";
-import { useDispatch } from "react-redux";
-import { store } from "@/store/store";
+
 import { usePathname } from "next/navigation";
-import { Provider } from "react-redux";
 import Footer from "./Footer";
 import Nav from "./Nav";
 import CustomProvider from "./CustomProvider";
