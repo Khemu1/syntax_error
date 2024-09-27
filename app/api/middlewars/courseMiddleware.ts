@@ -7,7 +7,6 @@ import { NextResponse } from "next/server";
 import type { NextRequest } from "next/server";
 import { CustomError } from "../error";
 import { NewCourseProps } from "@/types";
-import { console } from "inspector";
 
 export const validateNewCourse = async (
   req: NextRequest,
