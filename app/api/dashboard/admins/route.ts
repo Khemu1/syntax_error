@@ -7,7 +7,6 @@ import {
 } from "../../services/dashboard";
 import { errorHandler } from "../../error";
 import { EditAdminProps, SignUpProps } from "@/types";
- export const runtime = 'edge';
 export const GET = async () => {
   try {
     const data = await dashboardAdminsService();

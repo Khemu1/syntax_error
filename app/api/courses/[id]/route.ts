@@ -1,7 +1,6 @@
 import { NextRequest, NextResponse } from "next/server";
 import { CustomError, errorHandler } from "../../error";
 import { getCourseService } from "../../services/courseService";
- export const runtime = 'edge';
 interface Props {
   params: { id: number };
 }

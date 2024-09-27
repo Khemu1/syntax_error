@@ -1,7 +1,6 @@
 import { NextRequest, NextResponse } from "next/server";
 import { dashboardMyDataService } from "../../services/dashboard";
 import { errorHandler } from "../../error";
- export const runtime = 'edge';
 export const GET = async (req: NextRequest) => {
   try {
     const userId = req.headers.get("User-Id") as string;

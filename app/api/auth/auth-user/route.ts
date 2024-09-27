@@ -7,7 +7,6 @@ import {
   verifyAccessToken,
   verifyRefreshToken,
 } from "../../services/jwtService";
- export const runtime = 'edge';
 export const POST = async () => {
   try {
     const cookieStore = cookies();
