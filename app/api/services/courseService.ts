@@ -83,6 +83,7 @@ export const getAllCoursesService = async () => {
       return {
         id: Mcourse.id,
         title: Mcourse.title,
+        price: Mcourse.price,
         courseImage: courseImages.length > 0 ? courseImages[0].url : null,
       };
     });

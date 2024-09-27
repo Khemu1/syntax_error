@@ -88,7 +88,7 @@ export interface SignInResponseProps {
 export interface PublicCardCourseProps {
   id: number;
   title: string;
-  cardDescription: string;
+  price: number;
   courseImage: string;
 }
 

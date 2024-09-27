@@ -8,32 +8,38 @@ import React from "react";
 type Props = {
   course: PublicCardCourseProps;
 };
+
 const CourseCard: React.FC<Props> = ({ course }) => {
   return (
-    <Link
-      href={`/courses/${course.id}`}
-      className="flex justify-center w-max h-[300px]"
-    >
-      <div className="rounded-xl overflow-hidden shadow-lg transition-transform duration-300 hover:scale-105 cursor-pointer hover:shadow-2xl bg-base-100 max-w-[250px]">
-        <div className="w-[250] h-[200px] relative">
+    <Link href={`/courses/${course.id}`} className="flex justify-center w-max">
+      <div className="rounded-xl overflow-hidden shadow-lg transition-transform duration-300 hover:scale-105 cursor-pointer hover:shadow-2xl bg-base-100 w-[200px] flex flex-col">
+        <div className="flex justify-center w-full h-[200px] relative">
           <Image
             alt="card"
             src={course.courseImage}
-            // height={200}
-            // width={250}
-            layout="fill"
+            fill={true}
             className="object-cover"
+            style={{ objectPosition: "center" }} // Center the image
           />
         </div>
 
-        <div className="p-4">
-          <h2 className="text-lg font-semibold text-white text-nowrap whitespace-nowrap overflow-hidden text-ellipsis">
+        <div className="flex flex-col justify-between flex-grow">
+          {/* <h3 className="mx-auto my-0 p-2 text-lg font-semibold text-center whitespace-nowrap overflow-hidden text-ellipsis">
             {course.title}
-          </h2>
-          <p className="text-sm text-gray-500 whitespace-nowrap overflow-hidden text-ellipsis">
-            {course.cardDescription ||
-              "This is a brief description for the card."}
-          </p>
+          </h3> */}
+
+          <div
+            className={`flex justify-center   py-2 w-full text-center font-semibold text-[17px] ${
+              course.price === 0
+                ? "bg-gradient-to-r from-green-400 to-blue-500 text-white"
+                : "bg-blue-600 text-white"
+            }`}
+          >
+            {course.price !== 0 && (
+              <span className="text-sm font-light">E£</span>
+            )}
+            {course.price === 0 ? "Free" : course.price}
+          </div>
         </div>
       </div>
     </Link>
