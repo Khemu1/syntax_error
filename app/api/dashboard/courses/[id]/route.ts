@@ -7,6 +7,7 @@ import {
   editCourseSchemaForBackend,
   validateWithSchema,
 } from "@/utils/validations";
+ export const runtime = 'edge';
 import { NextRequest, NextResponse } from "next/server";
 interface Props {
   params: { id: number };

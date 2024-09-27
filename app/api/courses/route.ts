@@ -6,7 +6,7 @@ import {
 import { NextRequest, NextResponse } from "next/server";
 import { errorHandler } from "../error";
 import { getCourseData } from "../middlewars/courseMiddleware";
-
+ export const runtime = 'edge';
 export const POST = async (req: NextRequest) => {
   try {
     const userId = req.headers.get("User-Id")!;

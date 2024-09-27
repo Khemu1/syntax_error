@@ -1,7 +1,7 @@
 import { PrismaClient } from "@prisma/client";
 import { CustomError } from "../error";
 import { CourseModel, EditAdminProps, SignUpProps } from "@/types";
-import bcrypt from "bcrypt";
+// import bcrypt from "bcrypt";
 import { deleteImgur, uploadToImgur } from "./imgurServices";
 
 const prisma = new PrismaClient();
@@ -297,12 +297,12 @@ export const dashboardNewAdminsService = async (adminData: SignUpProps) => {
         errors
       );
     }
-    const hashedPassword = bcrypt.hashSync(adminData.password, 10);
+    // const hashedPassword = bcrypt.hashSync(adminData.password, 10);
     const newAdmin = await prisma.user.create({
       data: {
         username: adminData.username,
         email: adminData.email,
-        passwordHash: hashedPassword,
+        passwordHash: adminData.password,
       },
     });
 
