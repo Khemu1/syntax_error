@@ -1,6 +1,6 @@
 import { SignInProps } from "@/types";
 import { PrismaClient } from "@prisma/client";
-// import bcrypt from "bcrypt";
+import bcrypt from "bcrypt";
 import { CustomError } from "../error";
 
 const prisma = new PrismaClient();
@@ -22,7 +22,7 @@ export const signInService = async (data: SignInProps) => {
         userRole: true,
       },
     });
-    if (!user) {
+    if (!user || !(await bcrypt.compare(data.password, user.passwordHash))) {
       throw new CustomError("Invalid Credentials", 404, "Sign in Error", true);
     }
 
