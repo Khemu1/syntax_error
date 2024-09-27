@@ -5,10 +5,15 @@ import {
   getAllCourses,
   getCourse,
 } from "@/services/course"; // Ensure the correct import
-import { PublicCardCourseProps, PublicCourseProps } from "@/types";
+import {
+  EditCourseResponse,
+  PublicCardCourseProps,
+  PublicCourseProps,
+} from "@/types";
 import { useCallback, useState } from "react";
 
 export const useAddCourse = () => {
+  const [data, setData] = useState<EditCourseResponse | null>(null);
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState<Record<string, string> | null>(null);
   const [success, setSuccess] = useState<boolean>(false);
@@ -19,7 +24,7 @@ export const useAddCourse = () => {
     setSuccess(false);
     try {
       setSuccess(true);
-      await addCourse(form);
+      setData(await addCourse(form));
     } catch (err: unknown) {
       if (err instanceof CustomError) {
         if (err.errors) {
@@ -39,7 +44,7 @@ export const useAddCourse = () => {
     }
   };
 
-  return { handleAddCourse, loading, error, success };
+  return { handleAddCourse, loading, error, success, data };
 };
 
 export const useGetAllCourses = () => {

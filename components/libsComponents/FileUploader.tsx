@@ -3,6 +3,7 @@ import "filepond/dist/filepond.min.css";
 import "filepond-plugin-image-preview/dist/filepond-plugin-image-preview.css";
 import FilePondPluginImagePreview from "filepond-plugin-image-preview";
 import { FileUploaderProps } from "@/types";
+import Image from "next/image";
 // Register plugins
 registerPlugin(FilePondPluginImagePreview);
 
@@ -10,12 +11,25 @@ const FileUploader: React.FC<FileUploaderProps> = ({
   file,
   setFile,
   title,
+  initialImage,
 }) => {
   return (
     <div className="flex flex-col gap-2">
-      <h2 className="font-semibold text-xl">Upload {title}:</h2>
+      {initialImage && (
+        <div className="mb-2">
+          <h3 className="text-lg font-semibold">Current {title}:</h3>
+          <Image
+            src={initialImage}
+            alt={`${title} preview`}
+            className="rounded mx-auto"
+            width={500}
+            height={500}
+          />
+        </div>
+      )}
+      <h2 className="font-semibold text-xl">{initialImage ? "Update":"Upload"} {title}:</h2>
       <FilePond
-        className={"dark"}
+        
         files={file ? [file] : []}
         allowMultiple={false}
         onupdatefiles={(fileItems) => {

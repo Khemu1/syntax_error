@@ -1,7 +1,14 @@
+import { openEditCourseDialog } from "@/store/slices/dialogSlice";
 import { CourseDashboard } from "@/types";
 import React from "react";
+import { useDispatch } from "react-redux";
 
 const Course: React.FC<{ course: CourseDashboard }> = ({ course }) => {
+  const dispatch = useDispatch();
+  const handleEditClick = (e: React.MouseEvent) => {
+    e.stopPropagation();
+    dispatch(openEditCourseDialog(course.id));
+  };
   return (
     <>
       <th scope="row" className="px-6 py-4 font-medium text-white ">
@@ -14,12 +21,13 @@ const Course: React.FC<{ course: CourseDashboard }> = ({ course }) => {
         {course.updatedAt ? new Date(course.updatedAt).toDateString() : null}
       </td>
       <td className="px-6 py-4 text-right">
-        <a
-          href="#"
+        <button
+          type="button"
+          onClick={handleEditClick}
           className="font-medium text-blue-600 dark:text-blue-500 hover:underline"
         >
           Edit
-        </a>
+        </button>
       </td>
     </>
   );

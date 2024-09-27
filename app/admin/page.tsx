@@ -9,6 +9,7 @@ import { RootState } from "@/store/store";
 import Admins from "@/components/dashboard/Admins";
 import { logout } from "@/store/slices/authSlice";
 import Owners from "@/components/dashboard/Owners";
+import MyAccount from "@/components/dashboard/MyAccount";
 
 const Admin = () => {
   const [isSideBarOpen, setIsSideBarOpen] = useState(false);
@@ -107,6 +108,16 @@ const Admin = () => {
         >
           New Course
         </button>
+        <button
+          className={`${
+            section === "myaccount"
+              ? "bg-gray-800"
+              : "transition-all hover:bg-gray-700"
+          }`}
+          onClick={() => setSection("myaccount")}
+        >
+          My Account
+        </button>
       </aside>
 
       <aside
@@ -164,12 +175,23 @@ const Admin = () => {
         >
           New Course
         </button>
+        <button
+          className={`${
+            section === "myaccount"
+              ? "bg-gray-800"
+              : "transition-all hover:bg-gray-700"
+          }`}
+          onClick={() => setSection("myaccount")}
+        >
+          My Account
+        </button>
       </aside>
-      <section className="bg-base-200 flex-grow mt-5">
+      <section>
         {section === "newCourse" && <NewCourse />}
         {section === "courses" && <Courses />}
         {section === "admins" && <Admins />}
         {section === "owners" && <Owners />}
+        {section === "myaccount" && <MyAccount />}
       </section>
     </div>
   );

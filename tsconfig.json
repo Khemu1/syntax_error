@@ -23,10 +23,13 @@
   },
   "include": [
     "next-env.d.ts",
+    "next-request.d.ts",
     "**/*.ts",
     "**/*.tsx",
     ".next/types/**/*.ts",
-    "types/**/*.d.ts"
-, "prisma/seed.ts", "components/dashboard/Owner.tsx"  ],
+    "types/**/*.d.ts",
+    "prisma/seed.ts",
+    "components/dashboard/Owner.tsx"
+  ],
   "exclude": ["node_modules"]
 }

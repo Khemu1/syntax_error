@@ -1,9 +1,9 @@
-import {  NewCourseProps } from "@/types";
+import { NewCourseProps } from "@/types";
 import { PrismaClient } from "@prisma/client";
 import { CustomError } from "../error";
-import { uploadToImgur, deleteImages } from "./imgurServices";
+import { uploadToImgur } from "./imgurServices";
+import { title } from "process";
 const prisma = new PrismaClient();
-
 
 export const addCourseService = async (
   data: NewCourseProps,
@@ -54,8 +54,13 @@ export const addCourseService = async (
         },
       },
     });
-
-    return course;
+    return {
+      id: course.id,
+      createdAt: course.createdAt,
+      updatedAt: course.updatedAt,
+      title: course.title,
+      price: course.price,
+    };
   } catch (error) {
     console.error("Error creating course:", error);
     throw error;
@@ -78,7 +83,7 @@ export const getAllCoursesService = async () => {
 
       return {
         id: Mcourse.id,
-        courseTitle: Mcourse.title,
+        title: Mcourse.title,
         courseImage: courseImages.length > 0 ? courseImages[0].url : null,
       };
     });
@@ -100,18 +105,37 @@ export const getCourseService = async (id: number) => {
       include: { urlData: true },
     });
 
-    const courseImages =
-      course.urlData?.filter((url) => url.type === "course") || [];
-    const mindmapImages =
-      course.urlData?.filter((url) => url.type === "mindmap") || [];
-
+    if (!course.urlData) {
+      throw new CustomError(
+        "course not images",
+        404,
+        "",
+        true,
+        "image object is missing"
+      );
+    }
+    const courseImage = course.urlData.find((url) => url.type === "course");
+    const mindmapImage = course.urlData.find((url) => url.type === "mindmap");
+    if (!courseImage || !mindmapImage) {
+      throw new CustomError(
+        "course not images",
+        404,
+        "",
+        true,
+        "one of the images is missing"
+      );
+    }
     return {
       id: course.id,
       title: course.title,
-      instructorAndMentorInfo: course.instructorAndMentorInfo,
+      price: course.price,
+      totalSessions: course.totalSessions,
+      totalSessionPerWeek: course.totalSessionPerWeek,
+      totalTasks: course.totalTasks,
       courseInfo: course.courseInfo,
-      courseImage: courseImages.length > 0 ? courseImages[0].url : null,
-      mindmapImage: mindmapImages.length > 0 ? mindmapImages[0].url : null,
+      instructorAndMentorInfo: course.instructorAndMentorInfo,
+      courseImage: courseImage.url,
+      mindmapImage: mindmapImage.url,
     };
   } catch (error) {
     console.error("Error fetching course:", error);
@@ -131,15 +155,6 @@ export const deleteCourseService = async (ids: number[]) => {
 
       if (!findCourse) {
         throw new CustomError(`Course with ID ${id} not found`, 404, "", true);
-      }
-
-      const deleteHashes = findCourse.urlData
-        .map((url) => url.deleteHash)
-        .filter(Boolean);
-      // .filter(Boolean) means that if it finds delete hash it will return true thus adding the string to the array
-
-      if (deleteHashes.length > 0) {
-        await deleteImages(deleteHashes);
       }
 
       await prisma.course.update({
@@ -162,4 +177,3 @@ export const deleteCourseService = async (ids: number[]) => {
     throw error;
   }
 };
-

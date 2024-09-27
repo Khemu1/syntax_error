@@ -1,7 +1,8 @@
 import { PrismaClient } from "@prisma/client";
 import { CustomError } from "../error";
-import { EditAdminProps, SignUpProps } from "@/types";
+import { CourseModel, EditAdminProps, SignUpProps } from "@/types";
 import bcrypt from "bcrypt";
+import { deleteImgur, uploadToImgur } from "./imgurServices";
 
 const prisma = new PrismaClient();
 
@@ -28,6 +29,210 @@ export const dashboardCoursesService = async () => {
     return courses;
   } catch (error) {
     throw error;
+  }
+};
+export const dashboardAllCourseDataService = async (id: number) => {
+  try {
+    if (isNaN(id) || id === 0) {
+      throw new CustomError("invalid course id", 404, "", true);
+    }
+    const course = await prisma.course.findUniqueOrThrow({
+      where: { id: +id, deletedAt: null },
+      include: { urlData: true },
+    });
+
+    if (!course.urlData) {
+      throw new CustomError(
+        "course not images",
+        404,
+        "",
+        true,
+        "image object is missing"
+      );
+    }
+    const courseImage = course.urlData.find((url) => url.type === "course");
+    const mindmapImage = course.urlData.find((url) => url.type === "mindmap");
+    if (!courseImage || !mindmapImage) {
+      throw new CustomError(
+        "course not images",
+        404,
+        "",
+        true,
+        "one of the images is missing"
+      );
+    }
+    return {
+      id: course.id,
+      title: course.title,
+      price: course.price,
+      totalSessions: course.totalSessions,
+      totalSessionPerWeek: course.totalSessionPerWeek,
+      totalTasks: course.totalTasks,
+      courseInfo: course.courseInfo,
+      instructorAndMentorInfo: course.instructorAndMentorInfo,
+      courseImage: courseImage.url,
+      mindmapImage: mindmapImage.url,
+    };
+  } catch (error) {
+    console.error("Error fetching course:", error);
+    throw error;
+  }
+};
+
+export const dashboardEditCourseService = async (
+  id: number,
+  courseData: Record<string, string | number | object>
+) => {
+  try {
+    const findCourse = await prisma.course.findFirst({
+      where: { id },
+      include: { urlData: true },
+    });
+
+    if (!findCourse) {
+      throw new CustomError("Course not found", 404, "course lookup", true);
+    }
+
+    const hasFiles = ["courseImage", "mindmapImage"].filter(
+      (key) => courseData[key]
+    );
+
+    // Determine actual values to update
+    const actualValues = Object.entries(courseData).reduce(
+      (acc, [key, value]) => {
+        if (
+          key in findCourse &&
+          value !== findCourse[key as keyof typeof findCourse]
+        ) {
+          acc[key] = value;
+        }
+        return acc;
+      },
+      {} as Record<string, string | number | object>
+    );
+
+    if (Object.keys(actualValues).length === 0 && hasFiles.length === 0) {
+      throw new CustomError("No changes to update", 400, "admin update", true);
+    }
+
+    let updatedCourse;
+    // Update course details if there are changes
+    if (Object.keys(actualValues).length > 0) {
+      updatedCourse = await prisma.course.update({
+        where: { id: findCourse.id },
+        data: {
+          ...actualValues,
+          updatedAt: new Date(),
+        },
+        select: {
+          id: true,
+          title: true,
+          price: true,
+          createdAt: true,
+          updatedAt: true,
+        },
+      });
+    }
+
+    if (hasFiles.length > 0) {
+      hasFiles.forEach((type) => {
+        if (type === "courseImage") {
+          deleteCourseImage(
+            findCourse as CourseModel,
+            courseData.courseImage as File
+          );
+        }
+        if (type === "mindmapImage") {
+          deleteMindmapImage(
+            findCourse as CourseModel,
+            courseData.mindmapImage as File
+          );
+        }
+      });
+    }
+    const updated = { ...updatedCourse, image: false };
+    if (hasFiles.length > 0) {
+      updated.image = true;
+    }
+    return updated;
+  } catch (error) {
+    if (error instanceof CustomError) {
+      throw error;
+    }
+    console.error(error);
+    throw new CustomError(
+      "An error occurred while updating the course",
+      500,
+      "update course",
+      true
+    );
+  }
+};
+
+const deleteCourseImage = async (findCourse: CourseModel, file: File) => {
+  try {
+    for (const data of findCourse.urlData) {
+      if (data.type === "course") {
+        // Delete the existing image
+        await deleteImgur(data.deleteHash);
+        console.log("course image deleted");
+
+        // Optional: Add a small delay before the next operation
+
+        // Upload the new image
+        const uploadResult = await uploadToImgur(file);
+        console.log("course image uploaded", uploadResult.status);
+
+        const newImageData = {
+          deleteHash: uploadResult.data.deletehash,
+          imgurId: uploadResult.data.id,
+          url: uploadResult.data.link,
+        };
+
+        // Update the database record
+        await prisma.urlData.update({
+          where: { id: data.id },
+          data: {
+            ...newImageData,
+            updatedAt: new Date(),
+          },
+        });
+      }
+    }
+  } catch (err) {
+    console.error("Error processing course image:", err);
+  }
+};
+
+const deleteMindmapImage = async (findCourse: CourseModel, file: File) => {
+  try {
+    for (const data of findCourse.urlData) {
+      if (data.type === "mindmap") {
+        await deleteImgur(data.deleteHash);
+        console.log("mindmap image deleted");
+
+        // Upload the new image
+        const uploadResult = await uploadToImgur(file);
+        console.log("mindmap image uploaded", uploadResult.status);
+
+        const newImageData = {
+          deleteHash: uploadResult.data.deletehash,
+          imgurId: uploadResult.data.id,
+          url: uploadResult.data.link,
+        };
+
+        // Update the database record
+        await prisma.urlData.update({
+          where: { id: data.id },
+          data: {
+            ...newImageData,
+            updatedAt: new Date(),
+          },
+        });
+      }
+    }
+  } catch (err) {
+    console.error("Error processing mindmap image:", err);
   }
 };
 

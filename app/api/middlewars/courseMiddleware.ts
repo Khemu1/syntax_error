@@ -1,9 +1,13 @@
 // middleware.ts
-import { newCourseSchema, validateWithSchema } from "@/utils/validations";
+import {
+  newCourseSchema,
+  validateWithSchema,
+} from "@/utils/validations";
 import { NextResponse } from "next/server";
 import type { NextRequest } from "next/server";
 import { CustomError } from "../error";
 import { NewCourseProps } from "@/types";
+import { console } from "inspector";
 
 export const validateNewCourse = async (
   req: NextRequest,
@@ -74,7 +78,10 @@ export const getCourseData = async (req: NextRequest) => {
   }
 };
 
-export const checkDeletionIds = async (req: NextRequest,authUser:NextResponse) => {
+export const checkDeletionIds = async (
+  req: NextRequest,
+  authUser: NextResponse
+) => {
   try {
     const userId = authUser.headers.get("User-Id") as string;
 
@@ -118,3 +125,4 @@ export const checkDeletionIds = async (req: NextRequest,authUser:NextResponse) =
     throw error;
   }
 };
+

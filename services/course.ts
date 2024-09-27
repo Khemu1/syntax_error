@@ -1,7 +1,7 @@
 import { CustomError } from "@/app/api/error";
-import { CustomErrorResponse, imageDataResponse } from "@/types";
+import { CustomErrorResponse, EditCourseResponse } from "@/types";
 
-export const addCourse = async (form: FormData): Promise<imageDataResponse> => {
+export const addCourse = async (form: FormData): Promise<EditCourseResponse> => {
   try {
     const response = await fetch("/api/courses", {
       method: "POST",
@@ -20,7 +20,7 @@ export const addCourse = async (form: FormData): Promise<imageDataResponse> => {
       );
     }
 
-    const data = await response.json();
+    const data: EditCourseResponse = await response.json();
     return data;
   } catch (error) {
     if (!(error instanceof CustomError)) {

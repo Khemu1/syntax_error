@@ -4,8 +4,10 @@ import {
   CourseDashboard,
   CustomErrorResponse,
   EditAdminProps,
+  EditCourseResponse,
   MyDataDashboard,
   OwnerDashboard,
+  PublicCourseProps,
   SignUpProps,
 } from "@/types";
 
@@ -213,6 +215,70 @@ export const createAdmin = async (
     }
 
     const data: AdminDashboard = await response.json();
+    return data;
+  } catch (error) {
+    if (!(error instanceof CustomError)) {
+      throw new CustomError("Network error", 500);
+    }
+    throw error;
+  }
+};
+
+export const getCourseForEdit = async (
+  id: number
+): Promise<PublicCourseProps> => {
+  try {
+    const response = await fetch(`/api/dashboard/courses/${id}`, {
+      method: "GET",
+    });
+
+    if (!response.ok) {
+      const errorData: CustomErrorResponse = await response.json();
+      const err = new CustomError(
+        errorData.message || "data fetch faild",
+        response.status,
+        "fetch",
+        false,
+        errorData.details,
+        errorData.errors
+      );
+      throw err;
+    }
+
+    const data: PublicCourseProps = await response.json();
+    return data;
+  } catch (error) {
+    if (!(error instanceof CustomError)) {
+      throw new CustomError("Network error", 500);
+    }
+    throw error;
+  }
+};
+
+export const editDashboardCourse = async (
+  id: number,
+  form: FormData
+): Promise<EditCourseResponse> => {
+  try {
+    const response = await fetch(`/api/dashboard/courses/${id}`, {
+      method: "PUT",
+      body: form,
+    });
+
+    if (!response.ok) {
+      const errorData: CustomErrorResponse = await response.json();
+      const err = new CustomError(
+        errorData.message || "Data Update Failed",
+        response.status,
+        "PUT",
+        false,
+        errorData.details,
+        errorData.errors
+      );
+      throw err;
+    }
+
+    const data: EditCourseResponse = await response.json();
     return data;
   } catch (error) {
     if (!(error instanceof CustomError)) {

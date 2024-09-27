@@ -8,6 +8,11 @@ interface Props {
 }
 
 const Course: React.FC<Props> = ({ params: { id } }) => {
+  return (
+    <div className="flex flex-grow justify-center items-center  text-2xl font-semibold">
+      WIP , Stay Tuned
+    </div>
+  );
   const { loading, data, error, handleGetCourse } = useGetCourse(id);
 
   useEffect(() => {

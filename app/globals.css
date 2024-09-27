@@ -167,18 +167,7 @@ footer {
 }
 
 .admin_dashboard {
-  @apply flex flex-col lg:flex-row gap-10  w-full px-[2rem] lg:px-[0rem] lg:pr-[2rem] relative;
-}
-.admin_dashboard input {
-  padding: 9px;
-  border-radius: 7px;
-  border-bottom: 3px solid gray;
-  width: 250px;
-  transition: 250ms ease-in-out;
-}
-.admin_dashboard input:focus-within {
-  outline: none;
-  border-bottom-color: #10669c;
+  @apply flex flex-col lg:flex-row gap-10 flex-1  w-full px-[2rem] lg:px-[0rem] lg:pr-[2rem] relative;
 }
 
 .admin_dashboard aside:not(.aside_mobile) {
@@ -192,7 +181,7 @@ footer {
   display: flex;
   flex-direction: column;
   width: 200px;
-  height: 100dvh;
+  height: max-content;
   left: 0;
   @apply lg:hidden font-semibold text-[15px];
   z-index: 9;
@@ -208,9 +197,11 @@ footer {
 }
 
 .admin_dashboard section {
-  flex: 1;
+  @apply flex bg-base-200 flex-grow mt-5;
 }
-
+.admin_dashboard section > * {
+  @apply w-full;
+}
 @media (min-width: 640px) {
   .courses_page {
     grid-template-columns: repeat(2, 1fr);

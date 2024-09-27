@@ -8,6 +8,7 @@ import { RootState } from "@/store/store";
 import { setCourses } from "@/store/slices/dashboardSlice";
 import SkeletonTable from "../skeletons/SkeletonTable";
 import Toast from "../Toast"; // Import your Toast component
+import DashboardDialog from "./DashboardDialog";
 
 const Courses: React.FC = () => {
   const [allCourses, setAllCourses] = useState<CourseDashboard[]>([]);
@@ -33,6 +34,7 @@ const Courses: React.FC = () => {
 
   const dispatch = useDispatch();
   const dashboardState = useSelector((state: RootState) => state.dashboard);
+  const dialogState = useSelector((state: RootState) => state.dialog);
 
   useEffect(() => {
     if (dashboardState.courses.length === 0) {
@@ -96,6 +98,8 @@ const Courses: React.FC = () => {
 
   return (
     <div className="flex flex-col gap-4">
+      <h1>Courses Table</h1>
+
       <div className="flex justify-end mb-4">
         <button
           className={`mx text-white ${
@@ -174,6 +178,7 @@ const Courses: React.FC = () => {
       {toast && (
         <Toast message={toast.message} type={toast.type} onClose={closeToast} />
       )}
+      {dialogState.dialogType && <DashboardDialog />}
     </div>
   );
 };

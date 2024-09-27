@@ -1,7 +1,7 @@
 import { CustomError } from "@/app/api/error";
 import { object, string, ZodError, number } from "zod";
 
-export const validateWithSchema = (error: CustomError | ZodError | unknown) => {
+export const validateWithSchema =  (error: CustomError | ZodError | unknown) => {
   console.log("got error schema", error instanceof CustomError);
 
   if (error instanceof ZodError) {
@@ -80,7 +80,7 @@ const errorMessages = {
   },
   price: {
     required: "Price is required.",
-    min: "Price must be at least 10.",
+    min: "Price must be a positive value.",
   },
 };
 
@@ -123,7 +123,7 @@ export const newCourseSchema = object({
     1,
     { message: errorMessages.totalTasks.min }
   ),
-  price: number({ required_error: errorMessages.price.required }).min(5, {
+  price: number({ required_error: errorMessages.price.required }).min(0, {
     message: errorMessages.price.min,
   }),
 });
@@ -224,6 +224,177 @@ export const updatedAdminSchemaBackend = () => {
   }).superRefine((val, ctx) => {
     const emptyFields = [];
     if (!val.username && !val.password && !val.email) {
+      emptyFields.push("allFields");
+    }
+    if (emptyFields.length > 0) {
+      ctx.addIssue({
+        code: "custom",
+        message: "Please fill in at least one field.",
+        path: ["emptyFields"],
+      });
+    }
+  });
+};
+
+export const editCourseSchema = (
+  existingTitle?: string,
+  existingTotalSessions?: number,
+  existingTotalSessionPerWeek?: number,
+  existingTotalTasks?: number,
+  existingPrice?: number
+) => {
+  return object({
+    title: string({
+      required_error: errorMessages.courseTitle.required,
+    })
+      .min(3, { message: errorMessages.courseTitle.min })
+      .optional(),
+
+    courseImage: fileSchema.optional(),
+
+    mindmapImage: fileSchema.optional(),
+
+    instructorAndMentorInfo: string({
+      required_error: errorMessages.instructorAndMentorInfo.required,
+    })
+      .min(10, { message: errorMessages.instructorAndMentorInfo.min })
+      .optional(),
+
+    courseInfo: string({
+      required_error: errorMessages.courseInfo.required,
+    })
+      .min(10, { message: errorMessages.courseInfo.min })
+      .optional(),
+
+    totalSessions: number({
+      required_error: errorMessages.totalSessions.required,
+    })
+      .min(3, { message: errorMessages.totalSessions.min })
+      .optional(),
+
+    totalSessionPerWeek: number({
+      required_error: errorMessages.totalSessionPerWeek.required,
+    })
+      .min(1, { message: errorMessages.totalSessionPerWeek.min })
+      .optional(),
+
+    totalTasks: number({
+      required_error: errorMessages.totalTasks.required,
+    })
+      .min(1, { message: errorMessages.totalTasks.min })
+      .optional(),
+
+    price: number({
+      required_error: errorMessages.price.required,
+    })
+      .min(0, { message: errorMessages.price.min })
+      .optional(),
+  })
+    .refine((val) => val.title !== existingTitle, {
+      message: "Duplicate title. Please enter a valid one.",
+      path: ["title"],
+    })
+    .refine((val) => val.totalSessions !== existingTotalSessions, {
+      message: "Duplicate total sessions. Please enter a valid one.",
+      path: ["totalSessions"],
+    })
+    .refine((val) => val.totalSessionPerWeek !== existingTotalSessionPerWeek, {
+      message: "Duplicate total sessions per week. Please enter a valid one.",
+      path: ["totalSessionPerWeek"],
+    })
+    .refine((val) => val.totalTasks !== existingTotalTasks, {
+      message: "Duplicate total tasks. Please enter a valid one.",
+      path: ["totalTasks"],
+    })
+    .refine((val) => val.price !== existingPrice, {
+      message: "Duplicate price. Please enter a valid one.",
+      path: ["price"],
+    })
+    .superRefine((val, ctx) => {
+      const emptyFields = [];
+      if (
+        !val.title &&
+        !val.instructorAndMentorInfo &&
+        !val.courseInfo &&
+        !val.mindmapImage &&
+        !val.courseImage &&
+        !val.price &&
+        !val.totalSessionPerWeek &&
+        !val.totalSessions &&
+        !val.totalTasks
+      ) {
+        emptyFields.push("allFields");
+      }
+      if (emptyFields.length > 0) {
+        ctx.addIssue({
+          code: "custom",
+          message: "Please fill in at least one field.",
+          path: ["emptyFields"],
+        });
+      }
+    });
+};
+
+export const editCourseSchemaForBackend = () => {
+  return object({
+    title: string({
+      required_error: errorMessages.courseTitle.required,
+    })
+      .min(3, { message: errorMessages.courseTitle.min })
+      .optional(),
+
+    courseImage: fileSchema.optional(),
+
+    mindmapImage: fileSchema.optional(),
+
+    instructorAndMentorInfo: string({
+      required_error: errorMessages.instructorAndMentorInfo.required,
+    })
+      .min(10, { message: errorMessages.instructorAndMentorInfo.min })
+      .optional(),
+
+    courseInfo: string({
+      required_error: errorMessages.courseInfo.required,
+    })
+      .min(10, { message: errorMessages.courseInfo.min })
+      .optional(),
+
+    totalSessions: number({
+      required_error: errorMessages.totalSessions.required,
+    })
+      .min(3, { message: errorMessages.totalSessions.min })
+      .optional(),
+
+    totalSessionPerWeek: number({
+      required_error: errorMessages.totalSessionPerWeek.required,
+    })
+      .min(1, { message: errorMessages.totalSessionPerWeek.min })
+      .optional(),
+
+    totalTasks: number({
+      required_error: errorMessages.totalTasks.required,
+    })
+      .min(1, { message: errorMessages.totalTasks.min })
+      .optional(),
+
+    price: number({
+      required_error: errorMessages.price.required,
+    })
+      .min(0, { message: errorMessages.price.min })
+      .optional(),
+  }).superRefine((val, ctx) => {
+    const emptyFields = [];
+    if (
+      !val.title &&
+      !val.instructorAndMentorInfo &&
+      !val.courseInfo &&
+      !val.mindmapImage &&
+      !val.courseImage &&
+      !val.price &&
+      !val.totalSessionPerWeek &&
+      !val.totalSessions &&
+      !val.totalTasks
+    ) {
       emptyFields.push("allFields");
     }
     if (emptyFields.length > 0) {

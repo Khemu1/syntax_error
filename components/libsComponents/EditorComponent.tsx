@@ -11,13 +11,14 @@ export interface EditorComponentProps {
   id: string;
   title: string;
   initialValue?: string;
+  editContent?: string;
 }
 
 const EditorComponent: React.FC<EditorComponentProps> = ({
   editorRef,
   id,
   title,
-  initialValue = "<p>This is the initial content of the editor.</p>",
+  initialValue = `<p>This is the initial content of the editor.</p>`,
 }) => {
   useEffect(() => {
     if (editorRef.current) {
@@ -31,6 +32,7 @@ const EditorComponent: React.FC<EditorComponentProps> = ({
         {title}
       </label>
       <TinyMCEEditor
+        
         id={id}
         apiKey={process.env.NEXT_PUBLIC_EDITOR_KEY}
         onInit={(_, editor) => {

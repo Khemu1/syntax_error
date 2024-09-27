@@ -3,7 +3,9 @@ import {
   createAdmin,
   deleteAminds,
   editAdmin,
+  editDashboardCourse,
   getAdmins,
+  getCourseForEdit,
   getCourses,
   getMyInfo,
   getOwners,
@@ -12,8 +14,10 @@ import {
   AdminDashboard,
   CourseDashboard,
   EditAdminProps,
+  EditCourseResponse,
   MyDataDashboard,
   OwnerDashboard,
+  PublicCourseProps,
   SignUpProps,
 } from "@/types";
 import { useState, useCallback, useEffect } from "react";
@@ -256,4 +260,84 @@ export const useEditAdmin = () => {
   }, [error]);
 
   return { handleEditAdmin, loading, error, success, data };
+};
+
+export const useGetCourseForEdit = () => {
+  const [data, setData] = useState<PublicCourseProps | null>(null);
+  const [loading, setLoading] = useState(false);
+  const [error, setError] = useState<Record<string, string> | null>(null);
+  const [success, setSuccess] = useState<boolean>(false);
+  const handleGetCourse = useCallback(async (id: number) => {
+    setLoading(true);
+    setError(null);
+    setSuccess(false);
+    try {
+      setData(await getCourseForEdit(id));
+      setSuccess(true);
+    } catch (err: unknown) {
+      if (err instanceof CustomError) {
+        if (err.errors) {
+          setError(err.errors);
+        } else {
+          setError({
+            message: err.message,
+          });
+        }
+      } else {
+        setError({
+          message: "An unknown error occurred.",
+        });
+      }
+    } finally {
+      setLoading(false);
+    }
+  }, []);
+
+  return { data, handleGetCourse, loading, error, success };
+};
+
+export const useEditDashboardCourse = () => {
+  const [data, setData] = useState<EditCourseResponse | null>(null);
+  const [loading, setLoading] = useState(false);
+  const [error, setError] = useState<Record<string, string> | null>(null);
+  const [success, setSuccess] = useState<boolean>(false);
+  const handleEditCourse = useCallback(async (id: number, form: FormData) => {
+    setLoading(true);
+    setError(null);
+    setSuccess(false);
+    try {
+      setData(await editDashboardCourse(id, form));
+      setSuccess(true);
+    } catch (err: unknown) {
+      if (err instanceof CustomError) {
+        if (err.errors) {
+          setError(err.errors);
+        } else {
+          setError({
+            message: err.message,
+          });
+        }
+      } else {
+        setError({
+          message: "An unknown error occurred.",
+        });
+      }
+    } finally {
+      setLoading(false);
+    }
+  }, []);
+
+  useEffect(() => {
+    let timeoutId: NodeJS.Timeout;
+    if (error) {
+      timeoutId = setTimeout(() => {
+        setError(null);
+      }, 3000);
+    }
+    return () => {
+      clearTimeout(timeoutId);
+    };
+  }, [error]);
+
+  return { data, handleEditCourse, loading, error, success };
 };

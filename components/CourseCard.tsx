@@ -10,15 +10,22 @@ type Props = {
 };
 const CourseCard: React.FC<Props> = ({ course }) => {
   return (
-    <Link href={`/courses/${course.id}`} className="flex justify-center w-max">
+    <Link
+      href={`/courses/${course.id}`}
+      className="flex justify-center w-max h-[300px]"
+    >
       <div className="rounded-xl overflow-hidden shadow-lg transition-transform duration-300 hover:scale-105 cursor-pointer hover:shadow-2xl bg-base-100 max-w-[250px]">
-        <Image
-          alt="card"
-          src={course.courseImage}
-          height={200}
-          width={250}
-          className="object-cover"
-        />
+        <div className="w-[250] h-[200px] relative">
+          <Image
+            alt="card"
+            src={course.courseImage}
+            // height={200}
+            // width={250}
+            layout="fill"
+            className="object-cover"
+          />
+        </div>
+
         <div className="p-4">
           <h2 className="text-lg font-semibold text-white text-nowrap whitespace-nowrap overflow-hidden text-ellipsis">
             {course.title}

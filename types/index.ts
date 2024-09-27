@@ -11,9 +11,10 @@ export interface SignUpProps {
 }
 
 export interface FileUploaderProps {
-  file: File | null;
+  file: File | null | undefined;
   setFile: (file: File | null) => void;
   title: string;
+  initialImage?: string;
 }
 
 export interface imageDataResponse {
@@ -94,9 +95,12 @@ export interface PublicCardCourseProps {
 export interface PublicCourseProps {
   id: number;
   title: string;
-  cardDescription: string;
-  instructorAndMentorInfo: string;
+  price: number;
+  totalSessions: number;
+  totalSessionPerWeek: number;
+  totalTasks: number;
   courseInfo: string;
+  instructorAndMentorInfo: string;
   courseImage: string;
   mindmapImage: string;
 }
@@ -128,12 +132,18 @@ export type CourseDashboard = {
   id: number;
   title: string;
   price: number;
-  user: {
-    username: string;
-  };
   createdAt: Date;
   updatedAt: Date;
 };
+
+export interface EditCourseResponse {
+  id: number;
+  title: string;
+  price: number;
+  createdAt: Date;
+  updatedAt: Date | null;
+  image: boolean;
+}
 export interface ToastProps {
   message: string;
   type: "success" | "error";
@@ -145,4 +155,43 @@ export interface EditAdminProps {
   username: string | null;
   email: string | null;
   password: string | null;
+}
+
+export type EditCourseProps = {
+  title?: string;
+  courseImage?: File | null;
+  mindmapImage?: File | null;
+  instructorAndMentorInfo?: string;
+  courseInfo?: string;
+  price?: number;
+  totalSessions?: number;
+  totalSessionPerWeek?: number;
+  totalTasks?: number;
+};
+
+export interface UrlDataModel {
+  id: number;
+  createdAt: Date;
+  updatedAt: Date | null;
+  deletedAt: Date | null;
+  courseId: number;
+  url: string;
+  imgurId: string;
+  deleteHash: string;
+  type: string;
+}
+export interface CourseModel {
+  id: number;
+  userId: number;
+  title: string;
+  instructorAndMentorInfo: string;
+  courseInfo: string;
+  price: number;
+  totalSessions: number;
+  totalSessionPerWeek: number;
+  totalTasks: number;
+  createdAt: Date;
+  updatedAt: Date;
+  deletedAt: Date;
+  urlData: UrlDataModel[];
 }

@@ -21,6 +21,9 @@ const Courses = () => {
 
   return (
     <div className="flex flex-1 flex-col w-full h-full my-10 px-8">
+      <div className="mx-auto mb-10">
+        <h1>WIP</h1>
+      </div>
       <div className="flex flex-col sm:flex-row items-center gap-3 w-[90dvw] p-6 bg-base-300 mx-auto mb-10 shadow-md rounded-xl">
         <SearchBar />
         <Filter />

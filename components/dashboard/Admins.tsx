@@ -108,6 +108,7 @@ const Admins: React.FC = () => {
 
   return (
     <div className="flex flex-col gap-4">
+      <h1>Admins Table</h1>
       <div className="flex justify-between items-center">
         <button
           className="text-white font-semibold bg-blue-600 mb-4 px-4 py-2 rounded-lg shadow-lg"

@@ -1,8 +1,6 @@
 import { NextRequest, NextResponse } from "next/server";
 import { CustomError, errorHandler } from "../../error";
-import {
-  getCourseService,
-} from "../../services/courseService";
+import { getCourseService } from "../../services/courseService";
 interface Props {
   params: { id: number };
 }
@@ -18,4 +16,3 @@ export const GET = async (req: NextRequest, { params }: Props) => {
     return errorHandler(error);
   }
 };
-

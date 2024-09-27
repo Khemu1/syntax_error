@@ -23,44 +23,36 @@ export const uploadToImgur = async (
   }
   return response.json();
 };
+
 export const deleteImgur = async (
   deleteHash: string
 ): Promise<ImageDeleteResponse> => {
-  const response = await fetch(`https://api.imgur.com/3/image/${deleteHash}`, {
-    method: "DELETE",
-    headers: {
-      Authorization: `Bearer ${process.env.IMGUR_TOKEN}`,
-    },
-  });
+  try {
+    console.log(`Deleting image with hash: ${deleteHash}`);
+    const response = await fetch(
+      `https://api.imgur.com/3/image/${deleteHash}`,
+      {
+        method: "DELETE",
+        headers: {
+          Authorization: `Bearer ${process.env.IMGUR_TOKEN}`,
+        },
+      }
+    );
 
-  if (!response.ok) {
-    const errorData = await response.json();
-    throw new Error(`Imgur error: ${errorData.message}`);
-  }
-  return response.json();
-};
-
-export const deleteImages = async (deleteHashes: string[]) => {
-  const deletionPromises = deleteHashes.map(async (deleteHash) => {
-    try {
-      const response = await deleteImgur(deleteHash);
-      return response;
-    } catch (error) {
-      console.error(`Failed to delete image with hash ${deleteHash}:`, error);
+    if (!response.ok) {
+      const errorData = await response.json();
+      console.error("Error from Imgur API:", response.status, errorData);
       throw new CustomError(
-        "image deletion faild from imgur",
-        400,
+        `Something happened when deleting imgur image with ${deleteHash}`,
+        500,
         "imgur",
-        true,
-        "check the logs"
+        true
       );
     }
-  });
 
-  try {
-    const results = await Promise.all(deletionPromises);
-    return results;
+    return await response.json();
   } catch (error) {
+    console.error("Error during image deletion:", error);
     throw error;
   }
 };
