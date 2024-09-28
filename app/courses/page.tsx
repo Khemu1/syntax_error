@@ -18,22 +18,20 @@ const Courses = () => {
     handleGetAllCourses,
   } = useGetAllCourses();
 
-  const [filteredData, setFilteredData] = useState<PublicCardCourseProps[]>([]); // Filtered data to be displayed
-  const searchParams = useSearchParams(); // Hook for accessing query parameters
+  const [filteredData, setFilteredData] = useState<PublicCardCourseProps[]>([]);
+  const searchParams = useSearchParams();
 
-  // Fetch courses when the component mounts
   useEffect(() => {
     handleGetAllCourses();
   }, [handleGetAllCourses]);
 
-  // Update filteredData based on search query and filter from URL parameters
   useEffect(() => {
     if (courses.length > 0) {
-      const searchQuery = searchParams.get("q") || ""; // Get search query from URL
-      const sortBy = searchParams.get("sortBy") || "name-asc"; // Get sortBy filter from URL
+      const searchQuery = searchParams.get("q") || ""; 
+      const sortBy = searchParams.get("sortBy") || "name-asc"; 
 
-      const searchedData = filterBySearch(courses, searchQuery); // Apply search
-      const finalFilteredData = filterBy(searchedData, sortBy); // Apply filter
+      const searchedData = filterBySearch(courses, searchQuery); 
+      const finalFilteredData = filterBy(searchedData, sortBy);
       setFilteredData(finalFilteredData);
     }
   }, [courses, searchParams]);
@@ -42,7 +40,7 @@ const Courses = () => {
     <div className="flex flex-1 flex-col w-full h-full my-10 px-8">
       <div className="mx-auto mb-10"></div>
       <div className="flex flex-col sm:flex-row items-center gap-3 w-[90dvw] p-6 bg-base-300 mx-auto mb-10 shadow-md rounded-xl">
-        {/* Pass state handlers to SearchBar and Filter */}
+
         <SearchBar />
         <Filter />
       </div>
