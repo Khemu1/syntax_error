@@ -6,7 +6,7 @@ import Image from "next/image";
 import Link from "next/link";
 import { useEffect, useRef, useState } from "react";
 import { logout } from "@/store/slices/authSlice";
-import { signoutUser } from "@/services/auth";
+import { signoutUser } from "@/frontendServices/auth";
 
 const Nav = () => {
   const [isMenuOpen, setIsMenuOpen] = useState(false);
@@ -103,7 +103,7 @@ const Nav = () => {
           </li>
           {authState.isAuthenticated && (authState.role === 1 || 2) && (
             <li onClick={() => setIsMenuOpen(false)} className="nav_buttons">
-              <Link href={"/admin"}>Admin Dashboard</Link>
+              <Link href={"/dashboard"}>Dashboard</Link>
             </li>
           )}
           {!authState.isAuthenticated ? (
@@ -136,7 +136,7 @@ const Nav = () => {
             </li>
             {authState.isAuthenticated && (authState.role === 1 || 2) && (
               <li onClick={() => setIsMenuOpen(false)}>
-                <Link href={"/admin"}>Admin Dashboard</Link>
+                <Link href={"/dashboard"}>Dashboard</Link>
               </li>
             )}
 

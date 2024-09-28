@@ -89,9 +89,6 @@ const EditMyAccount = () => {
             width={75}
             height={50}
           />
-          <div className="text-lg font-light mt-2">
-            <span className="font-semibold">Edit Admin Account</span>
-          </div>
         </div>
         <form method="POST" className={formStyle.form} onSubmit={handleSubmit}>
           <div className={formStyle.input_container}>

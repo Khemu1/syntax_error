@@ -1,5 +1,5 @@
 import { imageDataResponse, ImageDeleteResponse } from "@/types";
-import { CustomError } from "../error";
+import { CustomError } from "@/middleware/CustomError";
 
 export const uploadToImgur = async (
   image: File

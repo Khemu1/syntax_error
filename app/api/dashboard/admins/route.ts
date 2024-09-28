@@ -4,8 +4,8 @@ import {
   dashboardDeleteAdminsService,
   dashboardEditAdminsService,
   dashboardNewAdminsService,
-} from "../../services/dashboard";
-import { errorHandler } from "../../error";
+} from "@/backendServices/dashboard";
+import { errorHandler } from "@/middleware/CustomError";
 import { EditAdminProps, SignUpProps } from "@/types";
 export const GET = async () => {
   try {
@@ -42,7 +42,7 @@ export const POST = async (req: NextRequest) => {
 
 export const PUT = async (req: NextRequest) => {
   try {
-    const data = (await req.json()) as { admin: EditAdminProps , id: number };
+    const data = (await req.json()) as { admin: EditAdminProps; id: number };
     const newAdmin = await dashboardEditAdminsService(+data.id, data.admin);
     return NextResponse.json(newAdmin, { status: 200 });
   } catch (error) {

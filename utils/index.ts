@@ -27,21 +27,24 @@ export const calculateExpirationDate = (duration: string): Date => {
 };
 
 export const filterBy = (data: PublicCardCourseProps[], by: string) => {
+  // Create a copy of the data array to avoid mutating the original
+  const sortedData = [...data];
+
   switch (by) {
     case "name-asc":
-      return data.sort((a, b) => a.title.localeCompare(b.title));
+      return sortedData.sort((a, b) => a.title.localeCompare(b.title));
 
     case "name-desc":
-      return data.sort((a, b) => b.title.localeCompare(a.title));
+      return sortedData.sort((a, b) => b.title.localeCompare(a.title));
 
     case "price-asc":
-      return data.sort((a, b) => a.price - b.price);
+      return sortedData.sort((a, b) => a.price - b.price);
 
     case "price-desc":
-      return data.sort((a, b) => b.price - a.price);
+      return sortedData.sort((a, b) => b.price - a.price);
 
     default:
-      return data;
+      return sortedData;
   }
 };
 
@@ -56,4 +59,23 @@ export const filterBySearch = (
   return data.filter((item) =>
     item.title.toLowerCase().includes(searchQuery.toLowerCase())
   );
+};
+
+export const processFormData = (data: FormData) => {
+  return Array.from(data.entries()).reduce((acc, [key, value]) => {
+    if (typeof value === "string") {
+      const trimmedValue = value.trim();
+      const parsedNumber = Number(trimmedValue);
+
+      if (!isNaN(parsedNumber) && parsedNumber >= 0) {
+        acc[key] = parsedNumber;
+      } else if (trimmedValue.length > 0) {
+        acc[key] = trimmedValue;
+      }
+    } else if (typeof value === "object") {
+      acc[key] = value as File;
+    }
+
+    return acc;
+  }, {} as Record<string, string | number | object>);
 };

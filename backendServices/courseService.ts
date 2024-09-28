@@ -1,6 +1,6 @@
 import { NewCourseProps } from "@/types";
 import { PrismaClient } from "@prisma/client";
-import { CustomError } from "../error";
+import { CustomError } from "@/middleware/CustomError";
 import { uploadToImgur } from "./imgurServices";
 const prisma = new PrismaClient();
 

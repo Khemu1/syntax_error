@@ -1,7 +1,7 @@
 import { SignInProps } from "@/types";
 import { PrismaClient } from "@prisma/client";
 import bcrypt from "bcrypt";
-import { CustomError } from "../error";
+import { CustomError } from "@/middleware/CustomError";
 import { sendEmail } from "./emailService";
 import { generatePasswordResetTokenForEmail } from "./jwtService";
 import { calculateExpirationDate } from "@/utils";

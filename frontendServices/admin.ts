@@ -1,4 +1,4 @@
-import { CustomError } from "@/app/api/error";
+import { CustomError } from "@/middleware/CustomError";
 import {
   AdminDashboard,
   CourseDashboard,

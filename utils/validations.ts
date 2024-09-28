@@ -1,4 +1,4 @@
-import { CustomError } from "@/app/api/error";
+import { CustomError } from "@/middleware/CustomError";
 import { object, string, ZodError, number } from "zod";
 
 export const validateWithSchema = (error: CustomError | ZodError | unknown) => {

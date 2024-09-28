@@ -1,12 +1,5 @@
 import { cookies } from "next/headers";
 import { NextRequest, NextResponse } from "next/server";
-import { CustomError } from "../error";
-import {
-  accessCookieOptions,
-  generateAccessTokens,
-  verifyAccessToken,
-  verifyRefreshToken,
-} from "../services/jwtService";
 import {
   signInSchema,
   signUpSchema,
@@ -19,6 +12,8 @@ import {
 } from "@/utils/validations";
 import { EditAdminProps, EditMyAccountProps } from "@/types";
 import { ZodError } from "zod";
+import { CustomError } from "./CustomError";
+import { accessCookieOptions, generateAccessTokens, verifyAccessToken, verifyRefreshToken } from "@/backendServices/jwtService";
 
 export const authenticateUser = async () => {
   try {
@@ -264,7 +259,7 @@ export const validateEmail = async (req: NextRequest) => {
       throw new CustomError("Invalid request", 400, "validation error");
     }
     const schema = validateEmailSchema();
-    schema.parse({ email:data });
+    schema.parse({ email: data });
     return NextResponse.next();
   } catch (error) {
     const validationErrors = validateWithSchema(error);
@@ -309,7 +304,7 @@ export const validateResetToken = async (req: NextRequest) => {
       throw new CustomError("Invalid request", 400, "validation error");
     }
     const schema = validateRestTokenSchema();
-    schema.parse({ restToken:data });
+    schema.parse({ restToken: data });
     return NextResponse.next();
   } catch (error) {
     const validationErrors = validateWithSchema(error);
@@ -323,3 +318,4 @@ export const validateResetToken = async (req: NextRequest) => {
     );
   }
 };
+

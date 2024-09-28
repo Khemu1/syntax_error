@@ -1,7 +1,7 @@
 import { NextRequest, NextResponse } from "next/server";
-import { CustomError, errorHandler } from "../../error";
-import { verifyPasswordResetToken } from "../../services/jwtService";
-import { resetPasswordService } from "../../services/authService";
+import { CustomError, errorHandler } from "@/middleware/CustomError";
+import { verifyPasswordResetToken } from "@/backendServices/jwtService";
+import { resetPasswordService } from "@/backendServices/authService";
 
 export const POST = async (req: NextRequest) => {
   try {

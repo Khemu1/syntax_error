@@ -1,10 +1,17 @@
-import { CustomError } from "@/app/api/error";
-import { authUser, checkResetToken, resetPassword, sendEmail, signIn } from "@/services/auth";
+import { CustomError } from "@/middleware/CustomError";
+import {
+  authUser,
+  checkResetToken,
+  resetPassword,
+  sendEmail,
+  signIn,
+} from "@/frontendServices/auth";
 import { login } from "@/store/slices/authSlice";
+import { RootState } from "@/store/store";
 import { SignInProps } from "@/types";
 import { usePathname, useRouter } from "next/navigation";
 import { useCallback, useEffect, useState } from "react";
-import { useDispatch } from "react-redux";
+import { useDispatch, useSelector } from "react-redux";
 
 export const useSignIn = () => {
   const [loading, setLoading] = useState(false);
@@ -67,6 +74,8 @@ export const useAuthUser = () => {
   const pathName = usePathname();
   const dispatch = useDispatch();
 
+  const user = useSelector((state: RootState) => state.auth); // Adjust based on your state structure
+
   const handleSignIn = useCallback(async () => {
     try {
       const { userId, username, role } = await authUser();
@@ -77,18 +86,19 @@ export const useAuthUser = () => {
       dispatch(login({ username, userId, role }));
     } catch (err) {
       localStorage.removeItem("userData");
-      if (pathName.startsWith("/admin")) {
+      if (pathName.startsWith("/dashboard")) {
         routeTo.push("/signin");
       }
     }
   }, [dispatch, routeTo]);
 
   useEffect(() => {
-    const isAuthPage = pathName.startsWith("/signin");
-    if (!isAuthPage) {
+    const isAuthPage = pathName.startsWith("/dashboard");
+
+    if (isAuthPage && (!user.isAuthenticated || !user.userId)) {
       handleSignIn();
     }
-  }, [handleSignIn, pathName]);
+  }, [handleSignIn, pathName, user]);
 
   return { handleSignIn };
 };
@@ -181,7 +191,6 @@ export const useCheckResetToken = () => {
 
   return { handleCheckResetToken, loading, error, success };
 };
-
 
 export const useResetPassword = () => {
   const [loading, setLoading] = useState(false);

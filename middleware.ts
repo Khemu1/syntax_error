@@ -1,98 +1,136 @@
 import { NextRequest, NextResponse } from "next/server";
-import {
-  checkDeletionIds,
-  validateNewCourse,
-} from "./app/api/middlewars/courseMiddleware";
+import { CustomError, errorHandler } from "./middleware/CustomError";
+import { Ratelimit } from "@upstash/ratelimit";
+import { kv } from "@vercel/kv";
 import {
   authenticateUser,
-  checkOwnerRole,
-  checkDashBoardRoles,
-  signIn,
   checkAdminData,
   checkAdminForEdit,
+  checkDashBoardRoles,
+  checkOwnerRole,
+  signIn,
   validateDashBoardAccountEdit,
   validateEmail,
-  validateResetToken,
   validatePassword,
-} from "./app/api/middlewars/authMiddleware";
-import { errorHandler } from "./app/api/error";
+  validateResetToken,
+} from "@/middleware/authMiddleware";
+import {
+  checkDeletionIds,
+  validateCourseForEdit,
+  validateNewCourse,
+} from "@/middleware/courseMiddleware";
+
+// Initialize rate limiter for general requests
+const rateLimit = new Ratelimit({
+  redis: kv,
+  limiter: Ratelimit.slidingWindow(60, "60s"), // 60 requests per minute for general API calls
+});
+
+// Initialize rate limiter for login attempts
+const loginRateLimit = new Ratelimit({
+  redis: kv,
+  limiter: Ratelimit.slidingWindow(5, "60s"), // 5 login attempts per minute
+});
+
+// Helper function to check rate limits for general requests
+const checkRateLimit = async (req: NextRequest) => {
+  const ip = req.ip ?? "127.0.0.1";
+  const { remaining } = await rateLimit.limit(ip);
+  if (remaining === 0) {
+    throw new CustomError("Too many requests", 429, "", true, "", {
+      message: "Too many requests, try again later",
+    });
+  }
+};
+
+// Helper function to check rate limits for login attempts
+const checkLoginRateLimit = async (req: NextRequest) => {
+  const ip = req.ip ?? "127.0.0.1";
+  const { remaining } = await loginRateLimit.limit(ip);
+  if (remaining === 0) {
+    throw new CustomError("Too many login attempts", 429, "", true, "", {
+      message: "Too many login attempts, please try again later.",
+    });
+  }
+};
+
+// Handle /api/courses routes
+const handleCoursesRoute = async (req: NextRequest) => {
+  const method = req.method;
+  if (method === "GET") {
+    return NextResponse.next();
+  }
+  const authUser = await authenticateUser();
+  if (method === "POST") {
+    const checkRoleForPost = await checkDashBoardRoles(authUser);
+    return await validateNewCourse(req, checkRoleForPost);
+  } else if (method === "DELETE") {
+    const checkRole = await checkOwnerRole(authUser);
+    return await checkDeletionIds(req, checkRole);
+  } else if (method === "PUT") {
+    await checkDashBoardRoles(authUser);
+    return await validateCourseForEdit(req);
+  }
+};
+
+// Handle /api/auth routes
+const handleAuthRoutes = async (req: NextRequest) => {
+  const { pathname } = req.nextUrl;
+
+  if (pathname === "/api/auth/signin") {
+    await checkLoginRateLimit(req);
+    return signIn(req);
+  } else if (pathname === "/api/auth/send-email") {
+    return await validateEmail(req);
+  } else if (pathname === "/api/auth/check-reset-password-token") {
+    return await validateResetToken(req);
+  } else if (pathname === "/api/auth/reset-password") {
+    return await validatePassword(req);
+  } else if (pathname === "/api/auth/auth-user") {
+    return NextResponse.next();
+  }
+};
+
+// Handle /api/dashboard routes
+const handleDashboardRoutes = async (req: NextRequest) => {
+  const authUser = await authenticateUser();
+  const method = req.method;
+  const { pathname } = req.nextUrl;
+
+  // Check user role for all dashboard routes
+  const checkRole = await checkOwnerRole(authUser);
+
+  if (pathname.startsWith("/api/dashboard/courses")) {
+    return checkRole;
+  } else if (pathname.startsWith("/api/dashboard/admins")) {
+    if (method === "DELETE") {
+      return await checkDeletionIds(req, checkRole);
+    } else if (method === "POST") {
+      return await checkAdminData(req, checkRole);
+    } else if (method === "PUT") {
+      return await checkAdminForEdit(req, checkRole);
+    }
+  } else if (pathname === "/api/dashboard/myinfo") {
+    const dashboardRoles = await checkDashBoardRoles(authUser); // Restored checkDashBoardRoles here
+    return await validateDashBoardAccountEdit(req, dashboardRoles); // Use roles for validation
+  } else if (pathname.startsWith("/api/dashboard/owners")) {
+    return checkRole;
+  }
+};
 
 export async function middleware(req: NextRequest) {
   try {
-    console.log("root middleware");
+    await checkRateLimit(req); // Check general rate limits
     const { pathname } = req.nextUrl;
-    console.log(pathname);
 
     if (pathname.startsWith("/api/courses")) {
-      if (req.method === "POST") {
-        const authUser = await authenticateUser();
-        const validateCourse = await validateNewCourse(req, authUser);
-        return validateCourse;
-      }
-      if (req.method === "DELETE") {
-        const authUser = await authenticateUser();
-        const checkRole = await checkOwnerRole(authUser);
-        const validateIds = await checkDeletionIds(req, checkRole);
-        return validateIds;
-      }
-      if (req.method === "PUT") {
-        const authUser = await authenticateUser();
-        const checkRole = await checkOwnerRole(authUser);
-        const validateIds = await checkDeletionIds(req, checkRole);
-        return validateIds;
-      }
-    }
-    if (pathname.startsWith("/api/auth/signin")) {
-      return signIn(req);
-    }
-    if (pathname.startsWith("/api/dashboard/courses")) {
-      const authUser = await authenticateUser();
-      const checkRole = await checkOwnerRole(authUser);
-      return checkRole;
-    }
-    if (pathname.startsWith("/api/dashboard/admins")) {
-      const authUser = await authenticateUser();
-      const checkRole = await checkOwnerRole(authUser);
-      if (req.method === "DELETE") {
-        const checkIds = await checkDeletionIds(req, checkRole);
-        return checkIds;
-      }
-      if (req.method === "POST") {
-        const validateNewAdmin = await checkAdminData(req, checkRole);
-        return validateNewAdmin;
-      }
-      if (req.method === "PUT") {
-        const validateEditAdmin = await checkAdminForEdit(req, checkRole);
-        return validateEditAdmin;
-      }
-      return checkRole;
+      return await handleCoursesRoute(req);
+    } else if (pathname.startsWith("/api/auth")) {
+      return await handleAuthRoutes(req);
+    } else if (pathname.startsWith("/api/dashboard")) {
+      return await handleDashboardRoutes(req);
     }
 
-    if (pathname.startsWith("/api/dashboard/myinfo")) {
-      const authUser = await authenticateUser();
-      const checkRole = await checkOwnerRole(authUser);
-      return checkRole;
-    }
-    if (pathname.startsWith("/api/dashboard/owners")) {
-      const authUser = await authenticateUser();
-      const checkRole = await checkOwnerRole(authUser);
-      return checkRole;
-    }
-    if (pathname.startsWith("/api/dashboard/myinfo")) {
-      const authUser = await authenticateUser();
-      const checkRoles = await checkDashBoardRoles(authUser);
-      return validateDashBoardAccountEdit(req, checkRoles);
-    }
-    if (pathname.startsWith("/api/auth/send-email")) {
-      return await validateEmail(req);
-    }
-    if (pathname.startsWith("/api/auth/check-reset-password-token")) {
-      return await validateResetToken(req);
-    }
-    if (pathname.startsWith("/api/auth/reset-password")) {
-      console.log("reset-password");
-      return await validatePassword(req);
-    }
     return NextResponse.next();
   } catch (error) {
     return errorHandler(error);

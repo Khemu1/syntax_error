@@ -1,5 +1,5 @@
 import { PrismaClient } from "@prisma/client";
-import { CustomError } from "../error";
+import { CustomError } from "@/middleware/CustomError";
 import cron from "node-cron";
 const prisma = new PrismaClient();
 

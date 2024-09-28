@@ -1,6 +1,6 @@
 import { NextRequest, NextResponse } from "next/server";
-import { CustomError, errorHandler } from "../../error";
-import { getCourseService } from "../../services/courseService";
+import { CustomError, errorHandler } from "@/middleware/CustomError";
+import { getCourseService } from "@/backendServices/courseService";
 interface Props {
   params: { id: number };
 }

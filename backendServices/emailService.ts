@@ -1,5 +1,5 @@
 import nodemailer from "nodemailer";
-import { CustomError } from "../error";
+import { CustomError } from "@/middleware/CustomError";
 
 export const sendEmail = async (
   email: string,

@@ -1,12 +1,13 @@
 // middleware.ts
 import {
+  editCourseSchemaForBackend,
   newCourseSchema,
   validateWithSchema,
 } from "@/utils/validations";
 import { NextResponse } from "next/server";
 import type { NextRequest } from "next/server";
-import { CustomError } from "../error";
-import { NewCourseProps } from "@/types";
+import { CustomError } from "./CustomError";
+import { processFormData } from "@/utils";
 
 export const validateNewCourse = async (
   req: NextRequest,
@@ -14,7 +15,8 @@ export const validateNewCourse = async (
 ) => {
   try {
     const userId = res.headers.get("User-Id");
-    const courseData = await getCourseData(req);
+    const data = await req.formData();
+    const courseData = processFormData(data);
 
     // Validate the courseData using your schema
     newCourseSchema.parse(courseData);
@@ -32,48 +34,6 @@ export const validateNewCourse = async (
       "There were errors with the submitted data.",
       validationErrors
     );
-  }
-};
-export const getCourseData = async (req: NextRequest) => {
-  try {
-    const formData = await req.formData();
-
-    // Define course keys dynamically based on NewCourseProps
-    const courseKeys: (keyof NewCourseProps)[] = [
-      "title",
-      "courseImage",
-      "mindmapImage",
-      "instructorAndMentorInfo",
-      "courseInfo",
-      "price",
-      "totalSessions",
-      "totalSessionPerWeek",
-      "totalTasks",
-    ];
-
-    const courseData: Partial<NewCourseProps> = {};
-
-    courseKeys.forEach((key) => {
-      const value = formData.get(key);
-
-      if (key === "courseImage" || key === "mindmapImage") {
-        courseData[key] = (value as File) ?? null;
-      } else if (
-        key === "price" ||
-        key === "totalSessions" ||
-        key === "totalSessionPerWeek" ||
-        key === "totalTasks"
-      ) {
-        courseData[key] = value ? Number(value) : 0;
-      } else {
-        courseData[key] =
-          value !== undefined && value !== null ? String(value) : "";
-      }
-    });
-    return courseData as NewCourseProps;
-  } catch (error) {
-    console.error("Error fetching course data:", error);
-    throw error;
   }
 };
 
@@ -125,3 +85,30 @@ export const checkDeletionIds = async (
   }
 };
 
+export const validateCourseForEdit = async (req: NextRequest) => {
+  try {
+    const form = await req.formData();
+    if (!form) {
+      throw new CustomError("Invalid data", 400, "validation error");
+    }
+
+    const actualValues = processFormData(form);
+
+    console.log("Processed values:", actualValues);
+
+    const schema = editCourseSchemaForBackend();
+    schema.parse(actualValues);
+
+    return NextResponse.next();
+  } catch (error) {
+    const validationErrors = validateWithSchema(error);
+    throw new CustomError(
+      "Validation Error",
+      400,
+      "validation error",
+      false,
+      "There were errors with the submitted data.",
+      validationErrors
+    );
+  }
+};

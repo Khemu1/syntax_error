@@ -10,7 +10,6 @@ import Courses from "@/components/dashboard/course/Courses";
 import Admins from "@/components/dashboard/admin/Admins";
 import Owners from "@/components/dashboard/owner/Owners";
 import { logout } from "@/store/slices/authSlice";
-export const runtime = "edge";
 
 const Admin = () => {
   const [isSideBarOpen, setIsSideBarOpen] = useState(false);

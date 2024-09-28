@@ -1,6 +1,6 @@
 import { NextRequest, NextResponse } from "next/server";
-import { errorHandler } from "../../error";
-import { sendEmailService } from "../../services/authService";
+import { errorHandler } from "@/middleware/CustomError";
+import { sendEmailService } from "@/backendServices/authService";
 
 export const POST = async (req: NextRequest) => {
   try {

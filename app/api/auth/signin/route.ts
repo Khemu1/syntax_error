@@ -4,10 +4,10 @@ import {
   generateAccessTokens,
   generateRefreshTokens,
   refreshCookieOptions,
-} from "../../services/jwtService";
-import { errorHandler } from "../../error";
+} from "@/backendServices/jwtService";
+import { errorHandler } from "@/middleware/CustomError";
 import { SignInProps } from "@/types";
-import { signInService } from "../../services/authService";
+import { signInService } from "@/backendServices/authService";
 export const POST = async (req: NextRequest) => {
   try {
     const body = (await req.json()) as SignInProps;

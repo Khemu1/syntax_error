@@ -149,12 +149,13 @@ const Course: React.FC<Props> = ({ params: { id } }) => {
       {data?.mindmapImage && (
         <div className="text-white bg-base-300 rounded-lg shadow-md p-3">
           <h2 className="text-xl font-semibold mb-2">Course Mind Map</h2>
-          <div className="flex mx-auto max-w-[800px] min-h-[300px] justify-center mt-2 overflow-hidden relative rounded-2xl transition-all shadow-lg active:scale-105">
+          <div className="flex mx-auto max-w-[75dvw]  justify-center mt-2 overflow-hidden relative rounded-2xl transition-all shadow-lg active:scale-105">
             <Image
               src={data.mindmapImage}
               alt="Mindmap"
-              fill={true}
-              className="rounded-2xl object-fit w-full h-full"
+              width={500} 
+              height={300} 
+              className="rounded-2xl max-w-full max-h-full object-contain" 
               priority={true}
             />
           </div>

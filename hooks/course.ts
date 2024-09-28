@@ -1,10 +1,10 @@
-import { CustomError } from "@/app/api/error";
+import { CustomError } from "@/middleware/CustomError";
 import {
   addCourse,
   deleteCourse,
   getAllCourses,
   getCourse,
-} from "@/services/course"; // Ensure the correct import
+} from "@/frontendServices/course"; // Ensure the correct import
 import {
   EditCourseResponse,
   PublicCardCourseProps,

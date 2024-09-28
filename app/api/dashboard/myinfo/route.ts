@@ -1,6 +1,9 @@
 import { NextRequest, NextResponse } from "next/server";
-import { dahsboardEditMyAccount, dashboardMyDataService } from "../../services/dashboard";
-import { errorHandler } from "../../error";
+import {
+  dahsboardEditMyAccount,
+  dashboardMyDataService,
+} from "@/backendServices/dashboard";
+import { errorHandler } from "@/middleware/CustomError";
 import { EditMyAccountProps } from "@/types";
 export const GET = async (req: NextRequest) => {
   try {
@@ -11,7 +14,6 @@ export const GET = async (req: NextRequest) => {
     return errorHandler(error);
   }
 };
-
 
 export const PUT = async (req: NextRequest) => {
   try {

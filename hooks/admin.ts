@@ -1,4 +1,4 @@
-import { CustomError } from "@/app/api/error";
+import { CustomError } from "@/middleware/CustomError";
 import {
   createAdmin,
   deleteAminds,
@@ -10,7 +10,7 @@ import {
   getCourses,
   getMyInfo,
   getOwners,
-} from "@/services/admin";
+} from "@/frontendServices/admin";
 import {
   AdminDashboard,
   CourseDashboard,
@@ -23,8 +23,6 @@ import {
   SignUpProps,
 } from "@/types";
 import { useState, useCallback, useEffect } from "react";
-
-
 
 export const useGetAdmins = () => {
   const [data, setData] = useState<AdminDashboard[] | null>(null);
@@ -363,13 +361,12 @@ export const useGetMyInfo = () => {
   return { data, handleGetMyInfo, loading, error, success };
 };
 
-
 export const useEditMyInfo = () => {
   const [data, setData] = useState<MyDataDashboard | null>(null);
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState<Record<string, string> | null>(null);
   const [success, setSuccess] = useState<boolean>(false);
-  const handleEditMyInfo = useCallback(async (myData:EditMyAccountProps) => {
+  const handleEditMyInfo = useCallback(async (myData: EditMyAccountProps) => {
     setLoading(true);
     setError(null);
     setSuccess(false);

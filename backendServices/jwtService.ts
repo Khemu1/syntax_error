@@ -1,6 +1,6 @@
 import { jwtVerify, SignJWT } from "jose";
 import { ResponseCookie } from "next/dist/compiled/@edge-runtime/cookies";
-import { CustomError } from "../error";
+import { CustomError } from "@/middleware/CustomError";
 
 export const accessCookieOptions: Partial<ResponseCookie> = {
   maxAge: parseInt(process.env.ACCESS_COOKIE_TIME as string), // 1 hour in seconds
@@ -182,7 +182,6 @@ export const generatePasswordResetTokenForEmail = async (user: {
     );
   }
 };
-
 
 export const verifyPasswordResetToken = async (token: string) => {
   try {

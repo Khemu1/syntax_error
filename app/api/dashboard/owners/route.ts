@@ -1,6 +1,6 @@
 import { NextRequest, NextResponse } from "next/server";
-import { dashboardOwnersService } from "../../services/dashboard";
-import { errorHandler } from "../../error";
+import { dashboardOwnersService } from "@/backendServices/dashboard";
+import { errorHandler } from "@/middleware/CustomError";
 export const GET = async (req: NextRequest) => {
   try {
     const userId = req.headers.get("User-Id") as string;

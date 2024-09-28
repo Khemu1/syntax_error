@@ -8,7 +8,6 @@ import React, { useEffect, useState } from "react";
 import { useSearchParams } from "next/navigation";
 import { filterBy, filterBySearch } from "@/utils";
 
-export const runtime = "edge";
 
 const Courses = () => {
   const {

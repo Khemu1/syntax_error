@@ -1,7 +1,9 @@
-import { CustomError } from "@/app/api/error";
+import { CustomError } from "@/middleware/CustomError";
 import { CustomErrorResponse, EditCourseResponse } from "@/types";
 
-export const addCourse = async (form: FormData): Promise<EditCourseResponse> => {
+export const addCourse = async (
+  form: FormData
+): Promise<EditCourseResponse> => {
   try {
     const response = await fetch("/api/courses", {
       method: "POST",

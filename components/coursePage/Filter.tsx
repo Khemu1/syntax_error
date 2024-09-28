@@ -7,11 +7,11 @@ const Filter = () => {
   const searchParams = useSearchParams();
 
   const handleOnClick = (e: React.MouseEvent<HTMLButtonElement>) => {
-    const value = e.currentTarget.value; 
+    const value = e.currentTarget.value;
     const AllsearchParams = new URLSearchParams(window.location.search);
 
     if (value.toLowerCase() === data.value.toLowerCase()) {
-      return; 
+      return;
     }
 
     const selectedFilter = filters.find((f) => f.value === value);
@@ -28,12 +28,20 @@ const Filter = () => {
 
   useEffect(() => {
     const sortBy = searchParams.get("sortBy");
+
     if (sortBy) {
       setData(
-        filters.find((f) => f.value.toLowerCase() === sortBy) ??
-          filters[0]
+        filters.find((f) => f.value.toLowerCase() === sortBy) ?? filters[0]
       );
     } else {
+      const AllsearchParams = new URLSearchParams(window.location.search);
+      AllsearchParams.set("sortBy", filters[0].value.toLowerCase());
+
+      const newUrl = `${
+        window.location.pathname
+      }?${AllsearchParams.toString()}`;
+      window.history.pushState({}, "", newUrl);
+
       setData(filters[0]);
     }
   }, [searchParams]);
@@ -45,7 +53,7 @@ const Filter = () => {
         role="button"
         className="btn m-1 bg-base-100 rounded-md text-[11px] sm:text-[16px]"
       >
-        Sort By : {data.name}
+        Sort By: {data.name}
       </div>
       <ul
         tabIndex={0}

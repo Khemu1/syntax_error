@@ -2,19 +2,21 @@ import {
   addCourseService,
   deleteCourseService,
   getAllCoursesService,
-} from "../services/courseService";
+} from "@/backendServices/courseService";
 import { NextRequest, NextResponse } from "next/server";
-import { errorHandler } from "../error";
-import { getCourseData } from "../middlewars/courseMiddleware";
+import { errorHandler } from "@/middleware/CustomError";
+import { processFormData } from "@/utils";
+import { NewCourseProps } from "@/types";
+
 export const POST = async (req: NextRequest) => {
   try {
     const userId = req.headers.get("User-Id")!;
-    const courseData = await getCourseData(req);
+    const form = await req.formData();
+    const courseData = processFormData(form) as NewCourseProps;
     console.log("controller", courseData);
 
     // Now you have the course data in a usable object format
     const newCourse = await addCourseService(courseData, +userId);
-    console.log(newCourse);
     return NextResponse.json(newCourse, { status: 201 });
   } catch (error) {
     return errorHandler(error);

@@ -1,4 +1,4 @@
-import { CustomError } from "@/app/api/error";
+import { CustomError } from "@/middleware/CustomError";
 import { CustomErrorResponse, SignInProps, SignInResponseProps } from "@/types";
 
 export const signIn = async (
@@ -132,7 +132,6 @@ export const sendEmail = async (email: string) => {
     throw error;
   }
 };
-
 
 export const resetPassword = async (password: string) => {
   try {

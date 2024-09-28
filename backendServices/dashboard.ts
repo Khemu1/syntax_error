@@ -1,5 +1,5 @@
 import { PrismaClient } from "@prisma/client";
-import { CustomError } from "../error";
+import { CustomError } from "@/middleware/CustomError";
 import {
   CourseModel,
   EditAdminProps,
@@ -103,7 +103,6 @@ export const dashboardEditCourseService = async (
       (key) => courseData[key]
     );
 
-    // Determine actual values to update
     const actualValues = Object.entries(courseData).reduce(
       (acc, [key, value]) => {
         if (
@@ -448,7 +447,6 @@ export const dashboardEditAdminsService = async (
     );
   }
 };
-
 
 export const dashboardOwnersService = async (id: number) => {
   try {

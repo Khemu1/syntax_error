@@ -1,12 +1,13 @@
 import { cookies } from "next/headers";
 import { NextResponse } from "next/server";
-import { CustomError, errorHandler } from "../../error";
+import { CustomError, errorHandler } from "@/middleware/CustomError";
 import {
   accessCookieOptions,
   generateAccessTokens,
   verifyAccessToken,
   verifyRefreshToken,
-} from "../../services/jwtService";
+} from "../../../../backendServices/jwtService";
+
 export const POST = async () => {
   try {
     const cookieStore = cookies();
