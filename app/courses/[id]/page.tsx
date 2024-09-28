@@ -20,15 +20,13 @@ const Course: React.FC<Props> = ({ params: { id } }) => {
     }
   }, [id]);
 
-  // useEffect(() => {
-  //   if (!data) {
-  //     return notFound();
-  //   }
-  // }, [data]);
-
   // Handle loading and errors
   if (loading) {
-    return <div className="text-center my-10 text-white">Loading...</div>;
+    return (
+      <div className="flex flex-grow justify-center items-center ">
+        <span className="loading loading-infinity w-[100px]"></span>
+      </div>
+    );
   }
 
   if (error) {
@@ -50,6 +48,7 @@ const Course: React.FC<Props> = ({ params: { id } }) => {
         <div className="m-2 flex w-[200px] gap-2 items-center bg-blue-600 rounded-xl px-2 py-1 font-semibold text-white">
           <div>
             <Image
+              priority={true}
               src={"/assets/icons/sessionIcon.svg"}
               width={32}
               height={32}
@@ -67,6 +66,7 @@ const Course: React.FC<Props> = ({ params: { id } }) => {
         <div className="m-2 flex w-[200px] gap-2 items-center bg-blue-600 rounded-xl px-2 py-1 font-semibold text-white">
           <div>
             <Image
+              priority={true}
               src={"/assets/icons/calendar-mark.svg"}
               width={32}
               height={32}
@@ -84,6 +84,7 @@ const Course: React.FC<Props> = ({ params: { id } }) => {
         <div className="m-2 flex w-[200px] gap-2 items-center bg-blue-600 rounded-xl px-2 py-1 font-semibold text-white">
           <div>
             <Image
+              priority={true}
               src={"/assets/icons/quiz.svg"}
               width={32}
               height={32}
@@ -107,6 +108,7 @@ const Course: React.FC<Props> = ({ params: { id } }) => {
         >
           <div>
             <Image
+              priority={true}
               src={"/assets/icons/price-tag.svg"}
               width={32}
               height={32}
@@ -153,6 +155,7 @@ const Course: React.FC<Props> = ({ params: { id } }) => {
               alt="Mindmap"
               fill={true}
               className="rounded-2xl object-fit w-full h-full"
+              priority={true}
             />
           </div>
         </div>

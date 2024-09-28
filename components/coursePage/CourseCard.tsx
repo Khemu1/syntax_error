@@ -15,6 +15,7 @@ const CourseCard: React.FC<Props> = ({ course }) => {
       <div className="rounded-xl overflow-hidden shadow-lg transition-transform duration-300 hover:scale-105 cursor-pointer hover:shadow-2xl bg-base-100 w-[200px] flex flex-col">
         <div className="flex justify-center w-full h-[200px] relative">
           <Image
+            priority={true}
             alt="card"
             src={course.courseImage}
             fill={true}
