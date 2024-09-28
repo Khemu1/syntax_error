@@ -101,7 +101,6 @@ export interface PublicCourseProps {
   totalTasks: number;
   courseInfo: string;
   instructorAndMentorInfo: string;
-  courseImage: string;
   mindmapImage: string;
 }
 

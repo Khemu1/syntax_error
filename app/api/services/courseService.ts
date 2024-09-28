@@ -84,6 +84,9 @@ export const getAllCoursesService = async () => {
         id: Mcourse.id,
         title: Mcourse.title,
         price: Mcourse.price,
+        totalSessions: Mcourse.totalSessions,
+        totalSessionPerWeek: Mcourse.totalSessionPerWeek,
+        totalQuizez: Mcourse.totalTasks,
         courseImage: courseImages.length > 0 ? courseImages[0].url : null,
       };
     });
