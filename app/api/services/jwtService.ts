@@ -152,6 +152,38 @@ export const generatePasswordResetToken = async (user: {
   }
 };
 
+export const generatePasswordResetTokenForEmail = async (user: {
+  id: number;
+}) => {
+  try {
+    const expirationTime = process.env.PASSWORD_RESET_TIME?.toString();
+    console.log(expirationTime);
+
+    if (!expirationTime) {
+      throw new CustomError("Expiration time is not set", 500, "token", true);
+    }
+
+    const jwt = await new SignJWT({
+      id: user.id,
+    })
+      .setProtectedHeader({ alg: "HS256" })
+      .setExpirationTime(expirationTime)
+      .setIssuedAt()
+      .sign(resetPasswordSecret);
+
+    return jwt;
+  } catch (error) {
+    console.log(error);
+    throw new CustomError(
+      "An error occurred while generating the password reset token",
+      500,
+      "token",
+      true
+    );
+  }
+};
+
+
 export const verifyPasswordResetToken = async (token: string) => {
   try {
     const { payload } = await jwtVerify(token, resetPasswordSecret);

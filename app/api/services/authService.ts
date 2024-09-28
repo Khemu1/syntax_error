@@ -3,7 +3,7 @@ import { PrismaClient } from "@prisma/client";
 import bcrypt from "bcrypt";
 import { CustomError } from "../error";
 import { sendEmail } from "./emailService";
-import { generatePasswordResetToken } from "./jwtService";
+import {  generatePasswordResetTokenForEmail } from "./jwtService";
 import { calculateExpirationDate } from "@/utils";
 import {
   addSecretTokenService,
@@ -60,7 +60,7 @@ export const sendEmailService = async (email: string) => {
       throw new Error("User not found");
     }
 
-    const token = await generatePasswordResetToken({ id: findUser.id });
+    const token = await generatePasswordResetTokenForEmail({ id: findUser.id });
 
     const expirationTime = process.env.PASSWORD_RESET_TIME as string;
 
