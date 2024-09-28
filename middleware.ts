@@ -111,8 +111,11 @@ const handleDashboardRoutes = async (req: NextRequest) => {
       return await checkAdminForEdit(req, checkRole);
     }
   } else if (pathname === "/api/dashboard/myinfo") {
-    const dashboardRoles = await checkDashBoardRoles(authUser); // Restored checkDashBoardRoles here
-    return await validateDashBoardAccountEdit(req, dashboardRoles); // Use roles for validation
+    const dashboardRoles = await checkDashBoardRoles(authUser);
+    if (method === "PUT") {
+      return await validateDashBoardAccountEdit(req, dashboardRoles); // Use roles for validation
+    }
+    return dashboardRoles;
   } else if (pathname.startsWith("/api/dashboard/owners")) {
     return checkRole;
   }
