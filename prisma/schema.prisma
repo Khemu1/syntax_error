@@ -6,72 +6,79 @@ generator client {
 }
 
 datasource db {
-  provider = "postgresql"
+  provider  = "postgresql"
   url       = env("DATABASE_URL")
   directUrl = env("DIRECT_URL")
 }
 
 model Role {
-  id    Int     @id @default(autoincrement()) // Primary key with auto-incrementing id
-  name  String  @unique                       // Role name must be unique (e.g., 'admin', 'user')
-  users UserRole[]                            // Relationship: a role can have many UserRoles
+  id    Int        @id @default(autoincrement()) // Primary key with auto-incrementing id
+  name  String     @unique // Role name must be unique (e.g., 'admin', 'user')
+  users UserRole[] // Relationship: a role can have many UserRoles
 }
 
 model User {
-  id            Int      @id @default(autoincrement()) // Primary key with auto-incrementing id
-  username      String   @unique                      // User's name must be unique
-  email         String   @unique                      // User's email must be unique
-  passwordHash  String                               // Stores the hashed password of the user
-  createdAt     DateTime @default(now())             // Timestamp for user creation
-  updatedAt     DateTime @updatedAt                   // Timestamp for user updates
-  deletedAt     DateTime?                             // Timestamp for soft deletion
-  courses       Course[]                             // One-to-many relationship: a user can have many courses
-  userRole      UserRole?                            // One-to-one relationship with UserRole
+  id           Int       @id @default(autoincrement()) // Primary key with auto-incrementing id
+  username     String    @unique // User's name must be unique
+  email        String    @unique // User's email must be unique
+  passwordHash String // Stores the hashed password of the user
+  createdAt    DateTime  @default(now()) // Timestamp for user creation
+  updatedAt    DateTime  @updatedAt // Timestamp for user updates
+  deletedAt    DateTime? // Timestamp for soft deletion
+  courses      Course[] // One-to-many relationship: a user can have many courses
+  userRole     UserRole? // One-to-one relationship with UserRole
+  Token        Token[]
 }
-
-
 
 // UserRole model acts as the join table between User and Role
 model UserRole {
-  id     Int     @id @default(autoincrement())
-  userId Int     @unique
+  id     Int  @id @default(autoincrement())
+  userId Int  @unique
   roleId Int
-  user   User    @relation(fields: [userId], references: [id])
-  role   Role    @relation(fields: [roleId], references: [id])
+  user   User @relation(fields: [userId], references: [id])
+  role   Role @relation(fields: [roleId], references: [id])
 
   @@unique([userId, roleId]) // This is your composite unique constraint
 }
 
-
 // Course model stores details of each course a user creates
 model Course {
-  id                    Int      @id @default(autoincrement())  // Primary key
-  userId                Int                                    // Foreign key to the User model
-  title                 String                                 // Course title
-  instructorAndMentorInfo String                               // Information about the course instructor
-  courseInfo            String                                 // Information about the course
-  price                  Int
-  totalSessions          Int
-  totalSessionPerWeek    Int
-  totalTasks             Int                                
-  createdAt             DateTime @default(now())               // Timestamp for course creation
-  updatedAt             DateTime?                    // Timestamp for course updates
-  deletedAt             DateTime?                              // Soft delete timestamp (nullable)
-  user                  User    @relation(fields: [userId], references: [id], onDelete: Cascade)  // A course belongs to one user
-  urlData               UrlData[]                              // A course can have multiple URLs
+  id                      Int       @id @default(autoincrement()) // Primary key
+  userId                  Int // Foreign key to the User model
+  title                   String // Course title
+  instructorAndMentorInfo String // Information about the course instructor
+  courseInfo              String // Information about the course
+  price                   Int
+  totalSessions           Int
+  totalSessionPerWeek     Int
+  totalTasks              Int
+  createdAt               DateTime  @default(now()) // Timestamp for course creation
+  updatedAt               DateTime? // Timestamp for course updates
+  deletedAt               DateTime? // Soft delete timestamp (nullable)
+  user                    User      @relation(fields: [userId], references: [id], onDelete: Cascade) // A course belongs to one user
+  urlData                 UrlData[] // A course can have multiple URLs
 }
 
 model UrlData {
-  id                    Int      @id @default(autoincrement())  // Primary key
-  courseId              Int                                    // Foreign key to the Course model
-  url                   String                                 // URL where the course content is stored
-  imgurId               String                                 // Imgur ID for the image/resource
-  deleteHash            String                                 // Delete hash for the URL (if applicable)
-  type                  String                                 // Type of URL (e.g., 'course', 'mindmap', etc.)
-  createdAt             DateTime @default(now())               // Timestamp for URL creation
-  updatedAt             DateTime?                    // Timestamp for URL updates
-  deletedAt             DateTime?                              // Soft delete timestamp (nullable)
-  
-  course                Course   @relation(fields: [courseId], references: [id], onDelete: Cascade) // Many UrlData entries belong to one Course
+  id         Int       @id @default(autoincrement()) // Primary key
+  courseId   Int // Foreign key to the Course model
+  url        String // URL where the course content is stored
+  imgurId    String // Imgur ID for the image/resource
+  deleteHash String // Delete hash for the URL (if applicable)
+  type       String // Type of URL (e.g., 'course', 'mindmap', etc.)
+  createdAt  DateTime  @default(now()) // Timestamp for URL creation
+  updatedAt  DateTime? // Timestamp for URL updates
+  deletedAt  DateTime? // Soft delete timestamp (nullable)
+
+  course Course @relation(fields: [courseId], references: [id], onDelete: Cascade) // Many UrlData entries belong to one Course
 }
 
+model Token {
+  id        Int      @id @default(autoincrement()) // Primary key with auto-incrementing id
+  userId    Int // Foreign key to the User model
+  token     String   @unique // Unique token string
+  createdAt DateTime 
+  expiresAt DateTime // Expiration timestamp for the token
+  used      Boolean  @default(false) // Flag to check if the token has been used
+  user      User     @relation(fields: [userId], references: [id], onDelete: Cascade) // Relationship to User
+}

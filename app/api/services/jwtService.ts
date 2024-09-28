@@ -16,9 +16,21 @@ export const refreshCookieOptions: Partial<ResponseCookie> = {
   sameSite: "strict",
 };
 
+export const resetPasswordCookieOptions = (
+  maxAge: number
+): Partial<ResponseCookie> => ({
+  maxAge,
+  httpOnly: true,
+  secure: process.env.NODE_ENV === "production",
+  sameSite: "strict",
+});
+
 const accessSecret = new TextEncoder().encode(process.env.ACCESS_TOKEN_SECRET);
 const refreshSecret = new TextEncoder().encode(
   process.env.REFRESH_TOKEN_SECRET
+);
+const resetPasswordSecret = new TextEncoder().encode(
+  process.env.RESET_PASSWORD_SECERT
 );
 
 export const generateAccessTokens = async (user: {
@@ -100,6 +112,54 @@ export const verifyRefreshToken = async (token: string) => {
     console.log(error);
     throw new CustomError(
       "An error occurred while veryfing refresh token: ",
+      500,
+      "token",
+      true
+    );
+  }
+};
+
+export const generatePasswordResetToken = async (user: {
+  id: number;
+  token: string;
+}) => {
+  try {
+    const expirationTime = process.env.PASSWORD_RESET_TIME?.toString();
+    console.log(expirationTime);
+
+    if (!expirationTime) {
+      throw new CustomError("Expiration time is not set", 500, "token", true);
+    }
+
+    const jwt = await new SignJWT({
+      id: user.id,
+      token: user.token,
+    })
+      .setProtectedHeader({ alg: "HS256" })
+      .setExpirationTime(expirationTime)
+      .setIssuedAt()
+      .sign(resetPasswordSecret);
+
+    return jwt;
+  } catch (error) {
+    console.log(error);
+    throw new CustomError(
+      "An error occurred while generating the password reset token",
+      500,
+      "token",
+      true
+    );
+  }
+};
+
+export const verifyPasswordResetToken = async (token: string) => {
+  try {
+    const { payload } = await jwtVerify(token, resetPasswordSecret);
+    return payload;
+  } catch (error) {
+    console.log(error);
+    throw new CustomError(
+      "An error occurred while verifying the password reset token",
       500,
       "token",
       true

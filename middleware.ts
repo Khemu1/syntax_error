@@ -11,6 +11,9 @@ import {
   checkAdminData,
   checkAdminForEdit,
   validateDashBoardAccountEdit,
+  validateEmail,
+  validateResetToken,
+  validatePassword,
 } from "./app/api/middlewars/authMiddleware";
 import { errorHandler } from "./app/api/error";
 
@@ -18,6 +21,8 @@ export async function middleware(req: NextRequest) {
   try {
     console.log("root middleware");
     const { pathname } = req.nextUrl;
+    console.log(pathname);
+
     if (pathname.startsWith("/api/courses")) {
       if (req.method === "POST") {
         const authUser = await authenticateUser();
@@ -62,6 +67,7 @@ export async function middleware(req: NextRequest) {
       }
       return checkRole;
     }
+
     if (pathname.startsWith("/api/dashboard/myinfo")) {
       const authUser = await authenticateUser();
       const checkRole = await checkOwnerRole(authUser);
@@ -74,8 +80,18 @@ export async function middleware(req: NextRequest) {
     }
     if (pathname.startsWith("/api/dashboard/myinfo")) {
       const authUser = await authenticateUser();
-      const checkRoles= await checkDashBoardRoles(authUser);
+      const checkRoles = await checkDashBoardRoles(authUser);
       return validateDashBoardAccountEdit(req, checkRoles);
+    }
+    if (pathname.startsWith("/api/auth/send-email")) {
+      return await validateEmail(req);
+    }
+    if (pathname.startsWith("/api/auth/check-reset-password-token")) {
+      return await validateResetToken(req);
+    }
+    if (pathname.startsWith("/api/auth/reset-password")) {
+      console.log("reset-password");
+      return await validatePassword(req);
     }
     return NextResponse.next();
   } catch (error) {
@@ -84,5 +100,5 @@ export async function middleware(req: NextRequest) {
 }
 
 export const config = {
-  matcher: ["/api/courses/:path*", "/api/auth", "/api/dashboard/:path*"],
+  matcher: ["/api/courses/:path*", "/api/auth/:path*", "/api/dashboard/:path*"],
 };

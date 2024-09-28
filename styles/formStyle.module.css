@@ -34,6 +34,10 @@
   background-color: rgb(6, 111, 209);
   color: white;
 }
+.form button:active:not(.button_success) {
+  background-color: rgb(6, 111, 209);
+  color: white;
+}
 .form input:focus-within {
   outline: none;
   box-shadow: 0 0 0 2px rgb(25, 106, 238);

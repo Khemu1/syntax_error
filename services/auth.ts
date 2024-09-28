@@ -100,3 +100,100 @@ export const signoutUser = async () => {
     throw error;
   }
 };
+
+export const sendEmail = async (email: string) => {
+  try {
+    const response = await fetch("/api/auth/send-email", {
+      method: "POST",
+      headers: {
+        "Content-Type": "application/json",
+      },
+      body: JSON.stringify(email),
+    });
+
+    if (!response.ok) {
+      const errorData: CustomErrorResponse = await response.json();
+      const err = new CustomError(
+        errorData.message || "Email Varfication Failed",
+        response.status,
+        "email varfication ",
+        true,
+        errorData.details,
+        errorData.errors
+      );
+      throw err;
+    }
+
+    return;
+  } catch (error) {
+    if (!(error instanceof CustomError)) {
+      throw new CustomError("Network error", 500);
+    }
+    throw error;
+  }
+};
+
+
+export const resetPassword = async (password: string) => {
+  try {
+    const response = await fetch("/api/auth/reset-password", {
+      method: "POST",
+      headers: {
+        "Content-Type": "application/json",
+      },
+      body: JSON.stringify(password),
+    });
+
+    if (!response.ok) {
+      const errorData: CustomErrorResponse = await response.json();
+      const err = new CustomError(
+        errorData.message || "PassWord Reset Failed",
+        response.status,
+        "password reset",
+        true,
+        errorData.details,
+        errorData.errors
+      );
+      throw err;
+    }
+
+    return;
+  } catch (error) {
+    if (!(error instanceof CustomError)) {
+      throw new CustomError("Network error", 500);
+    }
+    throw error;
+  }
+};
+
+export const checkResetToken = async (token: string) => {
+  try {
+    const response = await fetch("/api/auth/check-reset-password-token", {
+      method: "POST",
+      headers: {
+        "Content-Type": "application/json",
+      },
+      body: JSON.stringify(token),
+    });
+
+    if (!response.ok) {
+      const errorData: CustomErrorResponse = await response.json();
+      const err = new CustomError(
+        errorData.message || "PassWord Reset Failed",
+        response.status,
+        "password reset",
+        true,
+        errorData.details,
+        errorData.errors
+      );
+      throw err;
+    }
+
+    return;
+  } catch (error) {
+    if (!(error instanceof CustomError)) {
+      throw new CustomError("Network error", 500);
+    }
+    throw error;
+  }
+};

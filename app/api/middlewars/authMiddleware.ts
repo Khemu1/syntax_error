@@ -12,6 +12,9 @@ import {
   signUpSchema,
   updatedAdminSchemaBackend,
   updateMyAccountBackend,
+  validateEmailSchema,
+  validatePasswordSchema,
+  validateRestTokenSchema,
   validateWithSchema,
 } from "@/utils/validations";
 import { EditAdminProps, EditMyAccountProps } from "@/types";
@@ -178,7 +181,6 @@ export const checkAdminForEdit = async (
   } catch (error) {
     if (error instanceof ZodError) {
       const validationErrors = validateWithSchema(error);
-      console.log(validationErrors);
       const err = new CustomError(
         "Validation Error",
         400,
@@ -227,7 +229,7 @@ export const validateDashBoardAccountEdit = async (
 
     const schema = updateMyAccountBackend();
     const body = (await req.json()) as EditMyAccountProps;
-    
+
     const actualValues: Record<string, string> = {};
 
     for (const [key, value] of Object.entries(body)) {
@@ -242,7 +244,6 @@ export const validateDashBoardAccountEdit = async (
   } catch (error) {
     if (error instanceof ZodError) {
       const validationErrors = validateWithSchema(error);
-      console.log(validationErrors);
       throw new CustomError(
         "Validation Error",
         400,
@@ -253,5 +254,72 @@ export const validateDashBoardAccountEdit = async (
       );
     }
     throw error;
+  }
+};
+
+export const validateEmail = async (req: NextRequest) => {
+  try {
+    const data = await req.json();
+    if (!data) {
+      throw new CustomError("Invalid request", 400, "validation error");
+    }
+    const schema = validateEmailSchema();
+    schema.parse({ email:data });
+    return NextResponse.next();
+  } catch (error) {
+    const validationErrors = validateWithSchema(error);
+    throw new CustomError(
+      "Validation Error",
+      400,
+      "middleware",
+      false,
+      "There were errors with the submitted data.",
+      validationErrors
+    );
+  }
+};
+
+export const validatePassword = async (req: NextRequest) => {
+  try {
+    const resetToken = req.cookies.get("passwordResetToken")?.value;
+    const data = await req.json();
+    if (!data || !resetToken) {
+      throw new CustomError("Invalid request", 400, "validation error");
+    }
+    const schema = validatePasswordSchema();
+    return NextResponse.next();
+    schema.parse({ newPassword: data });
+  } catch (error) {
+    const validationErrors = validateWithSchema(error);
+    throw new CustomError(
+      "Validation Error",
+      400,
+      "middleware",
+      false,
+      "There were errors with the submitted data.",
+      validationErrors
+    );
+  }
+};
+
+export const validateResetToken = async (req: NextRequest) => {
+  try {
+    const data = await req.json();
+    if (!data) {
+      throw new CustomError("Invalid request", 400, "validation error");
+    }
+    const schema = validateRestTokenSchema();
+    schema.parse({ restToken:data });
+    return NextResponse.next();
+  } catch (error) {
+    const validationErrors = validateWithSchema(error);
+    throw new CustomError(
+      "Validation Error",
+      400,
+      "middleware",
+      false,
+      "There were errors with the submitted data.",
+      validationErrors
+    );
   }
 };

@@ -1,7 +1,7 @@
 import { CustomError } from "@/app/api/error";
 import { object, string, ZodError, number } from "zod";
 
-export const validateWithSchema =  (error: CustomError | ZodError | unknown) => {
+export const validateWithSchema = (error: CustomError | ZodError | unknown) => {
   console.log("got error schema", error instanceof CustomError);
 
   if (error instanceof ZodError) {
@@ -82,6 +82,10 @@ const errorMessages = {
     required: "Price is required.",
     min: "Price must be a positive value.",
   },
+  resetPasswordToken: {
+    required: "Reset password token is required.",
+    invalid: "Invalid reset password token.",
+  },
 };
 
 export const fileSchema = object({
@@ -151,7 +155,6 @@ export const signUpSchema = object({
     required_error: errorMessages.password.required,
   }).min(8, { message: errorMessages.password.min }),
 });
-
 
 export const updatedAdminSchema = (email?: string, username?: string) => {
   return object({
@@ -268,8 +271,6 @@ export const updateMyAccountBackend = () => {
     }
   });
 };
-
-
 
 export const updatedAdminSchemaBackend = () => {
   return object({
@@ -469,5 +470,27 @@ export const editCourseSchemaForBackend = () => {
         path: ["emptyFields"],
       });
     }
+  });
+};
+
+export const validateEmailSchema = () => {
+  return object({
+    email: string({ message: errorMessages.email.required }).email({
+      message: errorMessages.email.invalid,
+    }),
+  });
+};
+
+export const validateRestTokenSchema = () => {
+  return object({
+    restToken: string({ message: errorMessages.resetPasswordToken.required }),
+  });
+};
+
+export const validatePasswordSchema = () => {
+  return object({
+    newPassword: string({
+      required_error: errorMessages.password.required,
+    }).min(8, { message: errorMessages.password.min }),
   });
 };

@@ -2,13 +2,15 @@
 import Image from "next/image";
 import React, { useState } from "react";
 import formStyle from "@/styles/formStyle.module.css";
-import Link from "next/link";
 import { SignInProps } from "@/types";
 import { useSignIn } from "@/hooks/auth";
 import { signInSchema, validateWithSchema } from "@/utils/validations";
 export const runtime = "edge";
 
-const SignIn = () => {
+interface Props {
+  changeTabTo: (newTab: "signin" | "sendemail" ) => void;
+}
+const SignInForm: React.FC<Props> = ({ changeTabTo }) => {
   const [data, setData] = useState<SignInProps>({
     usernameOrEmail: "",
     password: "",
@@ -105,12 +107,12 @@ const SignIn = () => {
               {validationErrors?.password || apiErrors?.password}
             </small>
 
-            <Link
-              href="/forgot-password"
-              className="text-xs text-blue-500 hover:underline mt-1"
+            <span
+              className="text-xs text-blue-500 hover:underline mt-1 cursor-pointer"
+              onClick={() => changeTabTo("sendemail")}
             >
               Forgot your password?
-            </Link>
+            </span>
           </div>
 
           {apiErrors?.message && (
@@ -121,7 +123,10 @@ const SignIn = () => {
 
           <button
             type={success ? "button" : "submit"}
-            className={success || loading ? formStyle.button_success : ""}
+            className={`flex items-center justify-center  ${
+              success || loading ? formStyle.button_success : ""
+            }`}
+            disabled={success}
           >
             {loading ? (
               <span className="loading loading-spinner loading-md"></span>
@@ -135,4 +140,4 @@ const SignIn = () => {
   );
 };
 
-export default SignIn;
+export default SignInForm;

@@ -108,7 +108,7 @@ const Nav = () => {
           )}
           {!authState.isAuthenticated ? (
             <li className="nav_buttons">
-              <Link href={"/signin"}>Sign In</Link>
+              <Link href={"/authportal"}>Sign In</Link>
             </li>
           ) : (
             <li className="nav_buttons" onClick={handleSignOut}>
@@ -142,7 +142,7 @@ const Nav = () => {
 
             {!authState.isAuthenticated ? (
               <li>
-                <Link href={"/signin"}>Sign In</Link>
+                <Link href={"/authportal"}>Sign In</Link>
               </li>
             ) : (
               <li onClick={handleSignOut}>
