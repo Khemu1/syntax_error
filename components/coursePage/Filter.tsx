@@ -7,11 +7,11 @@ const Filter = () => {
   const searchParams = useSearchParams();
 
   const handleOnClick = (e: React.MouseEvent<HTMLButtonElement>) => {
-    const value = e.currentTarget.value; // Using `value` instead of `id`
+    const value = e.currentTarget.value; 
     const AllsearchParams = new URLSearchParams(window.location.search);
 
     if (value.toLowerCase() === data.value.toLowerCase()) {
-      return; // Exit if the filter is the same
+      return; 
     }
 
     const selectedFilter = filters.find((f) => f.value === value);

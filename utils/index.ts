@@ -1,3 +1,5 @@
+import { PublicCardCourseProps } from "@/types";
+
 export const calculateExpirationDate = (duration: string): Date => {
   const match = duration.match(/^(\d+)([smhd])$/); // Matches the format "15m", "1h", etc.
 
@@ -22,4 +24,36 @@ export const calculateExpirationDate = (duration: string): Date => {
     default:
       throw new Error("Invalid time unit.");
   }
+};
+
+export const filterBy = (data: PublicCardCourseProps[], by: string) => {
+  switch (by) {
+    case "name-asc":
+      return data.sort((a, b) => a.title.localeCompare(b.title));
+
+    case "name-desc":
+      return data.sort((a, b) => b.title.localeCompare(a.title));
+
+    case "price-asc":
+      return data.sort((a, b) => a.price - b.price);
+
+    case "price-desc":
+      return data.sort((a, b) => b.price - a.price);
+
+    default:
+      return data;
+  }
+};
+
+export const filterBySearch = (
+  data: PublicCardCourseProps[],
+  searchQuery: string
+) => {
+  if (!searchQuery) {
+    return data;
+  }
+
+  return data.filter((item) =>
+    item.title.toLowerCase().includes(searchQuery.toLowerCase())
+  );
 };

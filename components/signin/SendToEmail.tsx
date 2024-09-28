@@ -95,7 +95,9 @@ const SendToEmail: React.FC<Props> = ({ changeTabTo }) => {
             </span>
           )}
           {(apiErrors?.message || apiErrors?.restToken) && (
-            <p className="mx-auto text-red-600 font-semibold"></p>
+            <p className="mx-auto text-red-600 font-semibold">
+              {apiErrors?.message ?? apiErrors?.restToken}
+            </p>
           )}
         </form>
       </div>

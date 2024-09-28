@@ -3,7 +3,7 @@ import { PrismaClient } from "@prisma/client";
 import bcrypt from "bcrypt";
 import { CustomError } from "../error";
 import { sendEmail } from "./emailService";
-import {  generatePasswordResetTokenForEmail } from "./jwtService";
+import { generatePasswordResetTokenForEmail } from "./jwtService";
 import { calculateExpirationDate } from "@/utils";
 import {
   addSecretTokenService,
@@ -57,7 +57,14 @@ export const sendEmailService = async (email: string) => {
     });
 
     if (!findUser) {
-      throw new Error("User not found");
+      throw new CustomError(
+        "Email wasn't found",
+        404,
+        "User not found",
+        true,
+        "",
+        { message: "Email wasn't found" }
+      );
     }
 
     const token = await generatePasswordResetTokenForEmail({ id: findUser.id });
@@ -87,7 +94,6 @@ export const sendEmailService = async (email: string) => {
     <p>Best Regards,<br>Syntax Error Team</p>
   </div>
 `;
-
     await sendEmail(email, subject, html);
   } catch (error) {
     console.error("Error sending email:", error);

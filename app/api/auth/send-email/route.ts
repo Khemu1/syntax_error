@@ -9,6 +9,6 @@ export const POST = async (req: NextRequest) => {
     await sendEmailService(data);
     return NextResponse.json({ status: 200 });
   } catch (error) {
-    errorHandler(error);
+    return errorHandler(error);
   }
 };
