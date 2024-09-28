@@ -47,8 +47,8 @@ const Footer = () => {
         </div>
       </div>
       <div className="privay_terms">
-        <div className="flex gap-2 text-lg font-lato ">
-          <p className="font-lato font-semibold text-white">
+        <div className="flex gap-2 text-lg font-lato  items-center">
+          <p className="m-[0] font-lato font-semibold text-white">
             @{new Date().getFullYear()} Syntax Error.
           </p>{" "}
           All rights reserved
