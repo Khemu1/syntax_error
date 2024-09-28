@@ -69,9 +69,10 @@ export const Hero = () => {
           <p className="text-lg px-4 text-white">
             Our mission is to make learning to code accessible, engaging, and
             practical for everyone. We believe that hands-on, project-based
-            learning is key to mastering any skill. Whether you're just starting
-            your tech journey or you're a seasoned developer, Syntax Error is
-            here to support your learning path and career growth.
+            learning is key to mastering any skill. Whether you&apos;re just
+            starting your tech journey or you&apos;re a seasoned developer,
+            Syntax Error is here to support your learning path and career
+            growth.
           </p>
         </div>
       </div>
