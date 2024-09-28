@@ -7,7 +7,6 @@ type Props = {
   courses: [] | PublicCardCourseProps[];
 };
 const CourseCards: React.FC<Props> = ({ loading, courses }) => {
-  console.log(courses);
   return (
     <div className="courses_page">
       {loading
