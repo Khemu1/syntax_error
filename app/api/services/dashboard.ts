@@ -347,11 +347,52 @@ export const dashboardEditAdminsService = async (
   adminData: EditAdminProps
 ) => {
   try {
+    // Find the admin by ID
     const findAdmin = await prisma.user.findFirst({ where: { id: id } });
     if (!findAdmin) {
       throw new CustomError("Admin not found", 404, "admin lookup", true);
     }
 
+    // Check if the username or email is already taken by another admin
+    if (adminData.username) {
+      const existingUsername = await prisma.user.findFirst({
+        where: {
+          username: adminData.username,
+          id: { not: id }, // Ensure it's not the same admin
+        },
+      });
+      if (existingUsername) {
+        throw new CustomError(
+          "Username is already taken",
+          400,
+          "admin update",
+          true,
+          "",
+          { username: "Email is already taken" }
+        );
+      }
+    }
+
+    if (adminData.email) {
+      const existingEmail = await prisma.user.findFirst({
+        where: {
+          email: adminData.email,
+          id: { not: id },
+        },
+      });
+      if (existingEmail) {
+        throw new CustomError(
+          "Email is already taken",
+          400,
+          "admin update",
+          true,
+          "",
+          { email: "Email is already taken" }
+        );
+      }
+    }
+
+    // Prepare the actual values that need to be updated
     const actualValues: Record<string, string> = {};
 
     for (const [key, value] of Object.entries(adminData)) {
@@ -361,15 +402,24 @@ export const dashboardEditAdminsService = async (
         }
       }
     }
+
+    // Hash the password if it is provided
     if (adminData.password) {
       const hashedPassword = bcrypt.hashSync(adminData.password, 10);
       actualValues.passwordHash = hashedPassword;
     }
 
     if (Object.keys(actualValues).length === 0) {
-      throw new CustomError("No changes to update", 400, "admin update", true);
+      throw new CustomError(
+        "No changes to update",
+        400,
+        "admin update",
+        true,
+        "",
+        { message: "No changes to update" }
+      );
     }
-    console.log(actualValues, adminData);
+
     const newAdmin = await prisma.user.update({
       where: { id: findAdmin.id },
       data: {
@@ -398,6 +448,7 @@ export const dashboardEditAdminsService = async (
     );
   }
 };
+
 
 export const dashboardOwnersService = async (id: number) => {
   try {
