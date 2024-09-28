@@ -76,7 +76,9 @@ const handleCoursesRoute = async (req: NextRequest) => {
 // Handle /api/auth routes
 const handleAuthRoutes = async (req: NextRequest) => {
   const { pathname } = req.nextUrl;
-
+  if (pathname === "/api/auth/auth-user") {
+    return NextResponse.next();
+  }
   if (pathname === "/api/auth/signin") {
     await checkLoginRateLimit(req);
     return signIn(req);
@@ -86,8 +88,6 @@ const handleAuthRoutes = async (req: NextRequest) => {
     return await validateResetToken(req);
   } else if (pathname === "/api/auth/reset-password") {
     return await validatePassword(req);
-  } else if (pathname === "/api/auth/auth-user") {
-    return NextResponse.next();
   }
 };
 
