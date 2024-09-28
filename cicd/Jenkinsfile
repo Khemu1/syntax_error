@@ -13,6 +13,7 @@ pipeline {
               }
             }
         }
+    }
         stage("Cleanup") {
           steps {
             script {
@@ -22,6 +23,11 @@ pipeline {
         }
         stage("Image Build") {
             steps {
+              when {
+                expression {
+                  BRANCH_NAME == 'master'
+                }
+              }
                script{
                 gv.imageBuild()
                }
@@ -29,13 +35,22 @@ pipeline {
         }
         stage("Image Test") {
           steps {
+              when {
+                expression {
+                  BRANCH_NAME == 'master'
+                }
             script {
                 gv.imageTest()
             }
           }
         }
+        }
         stage("Image Push") {
             steps {
+               when {
+                expression {
+                  BRANCH_NAME == 'master'
+                }
                script{
                 gv.imagePush()
                }
@@ -43,6 +58,10 @@ pipeline {
         }
         stage("Deploy") {
             steps {
+              when {
+                expression {
+                  BRANCH_NAME == 'master'
+                }
                script{
                 gv.deploy()
                }
@@ -57,4 +76,5 @@ pipeline {
             echo "======== Pipeline execution failed ========"
         }
     }
+}
 }
