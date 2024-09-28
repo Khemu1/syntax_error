@@ -1,4 +1,4 @@
-import { Hero } from "@/components/Hero";
+import { Hero } from "@/components/coursePage/Hero";
 export const runtime = "edge";
 export default function Home() {
   return (

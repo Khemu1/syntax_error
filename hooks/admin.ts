@@ -17,9 +17,9 @@ import {
   EditAdminProps,
   EditCourseResponse,
   EditMyAccountProps,
+  GetCourseForEditResponse,
   MyDataDashboard,
   OwnerDashboard,
-  PublicCourseProps,
   SignUpProps,
 } from "@/types";
 import { useState, useCallback, useEffect } from "react";
@@ -238,7 +238,7 @@ export const useEditAdmin = () => {
 };
 
 export const useGetCourseForEdit = () => {
-  const [data, setData] = useState<PublicCourseProps | null>(null);
+  const [data, setData] = useState<GetCourseForEditResponse | null>(null);
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState<Record<string, string> | null>(null);
   const [success, setSuccess] = useState<boolean>(false);

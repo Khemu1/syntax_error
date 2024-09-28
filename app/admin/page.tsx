@@ -3,13 +3,13 @@ import { useEffect, useState } from "react";
 import Image from "next/image";
 import { useRouter } from "next/navigation";
 import { useDispatch, useSelector } from "react-redux";
-import NewCourse from "@/components/dashboard/NewCourse";
-import Courses from "@/components/dashboard/Courses";
+import MyAccount from "@/components/dashboard/myAccount/MyAccount";
 import { RootState } from "@/store/store";
-import Admins from "@/components/dashboard/Admins";
+import NewCourse from "@/components/dashboard/course/NewCourse";
+import Courses from "@/components/dashboard/course/Courses";
+import Admins from "@/components/dashboard/admin/Admins";
+import Owners from "@/components/dashboard/owner/Owners";
 import { logout } from "@/store/slices/authSlice";
-import Owners from "@/components/dashboard/Owners";
-import MyAccount from "@/components/dashboard/MyAccount";
 export const runtime = "edge";
 
 const Admin = () => {

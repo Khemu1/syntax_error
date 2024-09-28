@@ -1,11 +1,12 @@
 import React from "react";
-import NewAdmin from "./NewAdmin";
+import NewAdmin from "./admin/NewAdmin";
 import { useDispatch, useSelector } from "react-redux";
 import { RootState } from "@/store/store";
+;
+import EditMyAccount from "./myAccount/EditMyAccount";
+import EditAdmin from "./admin/EditAdmin";
+import EditCourse from "./course/EditCourse";
 import { closeDialog } from "@/store/slices/dialogSlice";
-import EditAdmin from "./EditAdmin";
-import EditCourse from "./EditCourse";
-import EditMyAccount from "./EditMyAccount";
 
 const DashboardDialog: React.FC = () => {
   const dispatch = useDispatch();

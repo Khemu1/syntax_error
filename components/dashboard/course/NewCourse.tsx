@@ -1,14 +1,14 @@
 import { useEffect, useRef, useState } from "react";
-import FileUploader from "../libsComponents/FileUploader"; // FileUploader component
-import EditorComponent from "../libsComponents/EditorComponent"; // TinyMCE editor component
 import { useAddCourse } from "@/hooks/course";
 import { validateWithSchema, newCourseSchema } from "@/utils/validations";
 import { CourseDashboard } from "@/types";
 import { setCourses } from "@/store/slices/dashboardSlice";
 import { useDispatch, useSelector } from "react-redux";
 import { RootState } from "@/store/store";
-import Toast from "../Toast";
 import formStyle from "@/styles/formStyle.module.css";
+import EditorComponent from "@/components/libsComponents/EditorComponent";
+import FileUploader from "@/components/libsComponents/FileUploader";
+import Toast from "@/components/skeletons/Toast";
 
 type EditorInstance = {
   getContent: () => string;

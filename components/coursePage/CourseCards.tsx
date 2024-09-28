@@ -1,6 +1,6 @@
 import CourseCard from "./CourseCard";
 import { PublicCardCourseProps } from "@/types";
-import SkeletonCard from "./skeletons/SkeletonCard";
+import SkeletonCard from "../skeletons/SkeletonCard";
 
 type Props = {
   loading: boolean;
@@ -15,10 +15,7 @@ const CourseCards: React.FC<Props> = ({ loading, courses }) => {
             <SkeletonCard key={index} />
           ))
         : courses.map((course) => (
-            <CourseCard
-              key={course.id}
-            course={course}
-            />
+            <CourseCard key={course.id} course={course} />
           ))}
     </div>
   );

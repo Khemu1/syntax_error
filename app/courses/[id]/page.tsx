@@ -3,6 +3,7 @@ import { useGetCourse } from "@/hooks/course";
 import React, { useEffect } from "react";
 import Image from "next/image";
 import { notFound } from "next/navigation";
+import Link from "next/link";
 
 interface Props {
   params: { id: number };
@@ -146,13 +147,12 @@ const Course: React.FC<Props> = ({ params: { id } }) => {
       {data?.mindmapImage && (
         <div className="text-white bg-base-300 rounded-lg shadow-md p-3">
           <h2 className="text-xl font-semibold mb-2">Course Mind Map</h2>
-          <div className="flex mx-auto w-max justify-center mt-2 overflow-hidden rounded-2xl transition-all shadow-lg active:scale-105">
+          <div className="flex mx-auto max-w-[800px] min-h-[300px] justify-center mt-2 overflow-hidden relative rounded-2xl transition-all shadow-lg active:scale-105">
             <Image
               src={data.mindmapImage}
               alt="Mindmap"
-              width={800}
-              height={600}
-              className="rounded-2xl object-cover"
+              fill={true}
+              className="rounded-2xl object-fit w-full h-full"
             />
           </div>
         </div>
@@ -160,9 +160,14 @@ const Course: React.FC<Props> = ({ params: { id } }) => {
 
       {/* Join Button */}
       <div className="flex w-full justify-center mt-8">
-        <button className="bg-blue-700 hover:bg-blue-800 transition duration-300 w-[250px] py-2 text-white font-semibold text-xl rounded-lg shadow-md">
+        <Link
+          href={
+            "https://docs.google.com/forms/d/136mdYWd4RPKqxDI32Q0rjfZ0-maD3RrlsT-Ym7-wcts/viewform?edit_requested=true#response=ACYDBNgoSmkZIYokCyaxkxnN_14x9_Ak21ShSq8xMSAMEHFOfrwPWWX_em_-jKciR0jndhA"
+          }
+          className="bg-blue-700 text-center hover:bg-blue-800 transition duration-300 w-[250px] py-2 text-white font-semibold text-xl rounded-lg shadow-md"
+        >
           Join Now
-        </button>
+        </Link>
       </div>
     </div>
   );

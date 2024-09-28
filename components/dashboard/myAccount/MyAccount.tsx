@@ -3,7 +3,7 @@ import { updateEmail } from "@/store/slices/authSlice";
 import { RootState } from "@/store/store";
 import React, { useEffect } from "react";
 import { useDispatch, useSelector } from "react-redux";
-import DashboardDialog from "./DashboardDialog";
+import DashboardDialog from "../DashboardDialog";
 import { openMyDataDialog } from "@/store/slices/dialogSlice";
 
 const MyAccount = () => {

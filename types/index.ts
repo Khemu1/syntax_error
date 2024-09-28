@@ -104,6 +104,19 @@ export interface PublicCourseProps {
   mindmapImage: string;
 }
 
+export interface GetCourseForEditResponse {
+  id: number;
+  title: string;
+  price: number;
+  totalSessions: number;
+  courseImage: string;
+  totalSessionPerWeek: number;
+  totalTasks: number;
+  courseInfo: string;
+  instructorAndMentorInfo: string;
+  mindmapImage: string;
+}
+
 export type MyDataDashboard = {
   username: string;
   email: string;

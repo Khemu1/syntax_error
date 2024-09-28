@@ -6,9 +6,9 @@ import { useDeleteCourse } from "@/hooks/course";
 import { useGetCourses } from "@/hooks/admin";
 import { RootState } from "@/store/store";
 import { setCourses } from "@/store/slices/dashboardSlice";
-import SkeletonTable from "../skeletons/SkeletonTable";
-import Toast from "../Toast"; // Import your Toast component
-import DashboardDialog from "./DashboardDialog";
+import SkeletonTable from "@/components/skeletons/SkeletonTable";
+import DashboardDialog from "../DashboardDialog";
+import Toast from "@/components/skeletons/Toast";
 
 const Courses: React.FC = () => {
   const [allCourses, setAllCourses] = useState<CourseDashboard[]>([]);

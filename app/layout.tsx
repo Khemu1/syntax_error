@@ -1,6 +1,6 @@
 import type { Metadata } from "next";
 import "./globals.css";
-import Holder from "@/components/Holder";
+import Holder from "@/components/layout/Holder";
 
 export const metadata: Metadata = {
   title: "Syntax Error",

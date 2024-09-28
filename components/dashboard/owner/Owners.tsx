@@ -4,8 +4,8 @@ import { AdminDashboard } from "@/types";
 import { useGetOwners } from "@/hooks/admin";
 import { RootState } from "@/store/store";
 import { setOwners } from "@/store/slices/dashboardSlice";
-import SkeletonTable from "../skeletons/SkeletonTable";
 import Owner from "./Owner";
+import SkeletonTable from "@/components/skeletons/SkeletonTable";
 
 const Admins: React.FC = () => {
   const [allOwners, setallOwners] = useState<AdminDashboard[]>([]);

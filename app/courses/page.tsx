@@ -1,7 +1,7 @@
 "use client";
-import CourseCards from "@/components/CourseCards";
-import Filter from "@/components/Filter";
-import SearchBar from "@/components/SearchBar";
+import CourseCards from "@/components/coursePage/CourseCards";
+import Filter from "@/components/coursePage/Filter";
+import SearchBar from "@/components/coursePage/SearchBar";
 import { useGetAllCourses } from "@/hooks/course";
 import React, { useEffect } from "react";
 

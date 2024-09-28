@@ -6,9 +6,9 @@ import {
   EditAdminProps,
   EditCourseResponse,
   EditMyAccountProps,
+  GetCourseForEditResponse,
   MyDataDashboard,
   OwnerDashboard,
-  PublicCourseProps,
   SignUpProps,
 } from "@/types";
 
@@ -259,7 +259,7 @@ export const createAdmin = async (
 
 export const getCourseForEdit = async (
   id: number
-): Promise<PublicCourseProps> => {
+): Promise<GetCourseForEditResponse> => {
   try {
     const response = await fetch(`/api/dashboard/courses/${id}`, {
       method: "GET",
@@ -278,7 +278,7 @@ export const getCourseForEdit = async (
       throw err;
     }
 
-    const data: PublicCourseProps = await response.json();
+    const data: GetCourseForEditResponse = await response.json();
     return data;
   } catch (error) {
     if (!(error instanceof CustomError)) {

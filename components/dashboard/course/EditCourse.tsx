@@ -1,6 +1,4 @@
 import { useEffect, useRef, useState } from "react";
-import FileUploader from "../libsComponents/FileUploader"; // FileUploader component
-import EditorComponent from "../libsComponents/EditorComponent"; // TinyMCE editor component
 import { validateWithSchema, editCourseSchema } from "@/utils/validations";
 import { useDispatch, useSelector } from "react-redux";
 import { RootState } from "@/store/store";
@@ -9,7 +7,9 @@ import { CourseDashboard, EditCourseProps } from "@/types";
 import formStyle from "@/styles/formStyle.module.css";
 import { setCourses } from "@/store/slices/dashboardSlice";
 import { closeDialog } from "@/store/slices/dialogSlice";
-import Toast from "../Toast";
+import EditorComponent from "@/components/libsComponents/EditorComponent";
+import FileUploader from "@/components/libsComponents/FileUploader";
+import Toast from "@/components/skeletons/Toast";
 
 type EditorInstance = {
   getContent: () => string;

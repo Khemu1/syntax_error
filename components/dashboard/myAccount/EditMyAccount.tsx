@@ -7,7 +7,7 @@ import { EditMyAccountProps } from "@/types";
 import { updateMyAccount, validateWithSchema } from "@/utils/validations";
 import formStyle from "@/styles/formStyle.module.css";
 import { closeDialog } from "@/store/slices/dialogSlice";
-import Toast from "../Toast";
+import Toast from "../../skeletons/Toast";
 import { updateData } from "@/store/slices/authSlice";
 
 const EditMyAccount = () => {

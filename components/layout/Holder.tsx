@@ -3,8 +3,8 @@
 
 import { usePathname } from "next/navigation";
 import Footer from "./Footer";
-import Nav from "./Nav";
 import CustomProvider from "./CustomProvider";
+import Nav from "./Nav";
 
 const Holder: React.FC<{ children: React.ReactNode }> = ({ children }) => {
   const pathName = usePathname();

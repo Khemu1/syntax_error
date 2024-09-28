@@ -5,10 +5,10 @@ import { AdminDashboard } from "@/types";
 import { useGetAdmins, useDeleteAdmins } from "@/hooks/admin"; // Import the delete hook
 import { RootState } from "@/store/store";
 import { setAdmins } from "@/store/slices/dashboardSlice";
-import SkeletonTable from "../skeletons/SkeletonTable";
-import Toast from "../Toast";
-import NewAdminDialog from "./DashboardDialog";
 import { openNewAdminDialog } from "@/store/slices/dialogSlice";
+import SkeletonTable from "@/components/skeletons/SkeletonTable";
+import Toast from "@/components/skeletons/Toast";
+import DashboardDialog from "../DashboardDialog";
 
 const Admins: React.FC = () => {
   const [allAdmins, setAllAdmins] = useState<AdminDashboard[]>([]);
@@ -191,7 +191,7 @@ const Admins: React.FC = () => {
       {deleteSuccess && (
         <div className="text-green-500 mt-2">Admins deleted successfully.</div>
       )}
-      {dialogState.isDialogOpen && <NewAdminDialog />}
+      {dialogState.isDialogOpen && <DashboardDialog />}
     </div>
   );
 };
