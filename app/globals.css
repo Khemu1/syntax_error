@@ -318,3 +318,14 @@ footer {
 .profile_input {
   @apply w-[250px] p-3 rounded-md font-semibold  bg-base-300 shadow-md  transition-all focus:outline-none focus:ring-2 focus:ring-blue-500;
 }
+
+.feat {
+  @apply flex flex-col gap-2 flex-wrap  items-center cursor-pointer rounded-lg shadow-md px-3 py-6 w-[95dvw] md:w-[75dvw] bg-base-300;
+  transition: all 250ms ease-in-out;
+}
+.feat:hover {
+  transform: scale(1.02);
+}
+.feat:active {
+  transform: scale(1.03);
+}

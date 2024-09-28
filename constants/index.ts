@@ -1,23 +1,5 @@
 export const footerLinks = [
   {
-    name: "About",
-    links: [
-      { title: "How it works", url: "/" },
-      { title: "Featured", url: "/" },
-      { title: "Partnership", url: "/" },
-      { title: "Bussiness Relation", url: "/" },
-    ],
-  },
-  {
-    name: "Company",
-    links: [
-      { title: "Events", url: "/" },
-      { title: "Blog", url: "/" },
-      { title: "Podcast", url: "/" },
-      { title: "Invite a friend", url: "/" },
-    ],
-  },
-  {
     name: "Socials",
     links: [
       { title: "Discord", url: "https://discord.gg/mMG2xqb24q" },
@@ -43,3 +25,27 @@ export const filters = [
   { name: "Price ASC", value: "price-asc" },
   { name: "Price DSC", value: "price-desc" },
 ];
+
+export const courses = [
+  {
+    title: "Programming Basics",
+    description:
+      "An introduction to programming languages, covering the fundamentals of object-oriented programming (OOP), data structures, and algorithms.",
+  },
+  {
+    title: "Network",
+    description:
+      "Understand the basics of networking, including protocols, models, and practical applications in a modern IT environment.",
+  },
+  {
+    title: "Problem Solving",
+    description:
+      "Sharpen your problem-solving skills by learning how to approach complex challenges with structured techniques.",
+  },
+  {
+    title: "Flutter",
+    description:
+      "Learn Flutter to build cross-platform mobile applications with a single codebase, making app development faster and easier.",
+  },
+];
+
