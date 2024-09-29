@@ -23,7 +23,7 @@ import {
 // Initialize rate limiter for general requests
 const rateLimit = new Ratelimit({
   redis: kv,
-  limiter: Ratelimit.slidingWindow(60, "60s"), // 60 requests per minute for general API calls
+  limiter: Ratelimit.slidingWindow(60, "1s"), // 60 requests per minute for general API calls
 });
 
 // Initialize rate limiter for login attempts

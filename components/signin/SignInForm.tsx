@@ -8,7 +8,7 @@ import { signInSchema, validateWithSchema } from "@/utils/validations";
 export const runtime = "edge";
 
 interface Props {
-  changeTabTo: (newTab: "signin" | "sendemail" ) => void;
+  changeTabTo: (newTab: "signin" | "sendemail") => void;
 }
 const SignInForm: React.FC<Props> = ({ changeTabTo }) => {
   const [data, setData] = useState<SignInProps>({
@@ -116,7 +116,7 @@ const SignInForm: React.FC<Props> = ({ changeTabTo }) => {
           </div>
 
           {apiErrors?.message && (
-            <p className="mx-auto h-[10px] font-semibold text-xl text-red-600">
+            <p className="mx-auto text-center mb-5 h-[10px] font-semibold text-xl text-red-600">
               {apiErrors?.message}
             </p>
           )}
